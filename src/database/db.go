@@ -18,7 +18,7 @@ var DbConfig = configType{
 
 var DBCon *sqlx.DB
 
-func ConnectToDB(config configType) error {
+func ConnectToDB(config configType) {
 	db, err := sqlx.Connect(config.Driver,
 		"user="+config.User+
 			" password="+config.Password+
@@ -26,10 +26,8 @@ func ConnectToDB(config configType) error {
 			" sslmode=disable")
 
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	DBCon = db
-
-	return nil
 }
