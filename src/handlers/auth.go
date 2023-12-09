@@ -5,6 +5,7 @@ import (
 	"food-backend/src/forms"
 	"food-backend/src/repositories"
 	"github.com/gofiber/fiber/v2"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func HandleAuth(ctx *fiber.Ctx) error {
@@ -26,13 +27,18 @@ func HandleAuth(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(user)
-
 	// Check user password
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(formAuth.Password))
+	if err != nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(user)
 
 	// Generate tokens
 
 	// Return tokens
 
-	return nil
+	//return nil
 }
