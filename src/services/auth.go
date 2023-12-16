@@ -5,7 +5,7 @@ import (
 	"food-backend/src/domains"
 	"food-backend/src/responses"
 	"food-backend/src/utils"
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
@@ -25,6 +25,7 @@ func (r AuthService) GenerateTokens(user *domains.User) (*responses.ResponseToke
 	if err != nil {
 		return nil, err
 	}
+
 	// Generate refresh token
 	rt := uuid.New().String()
 

@@ -1,7 +1,9 @@
 package router
 
 import (
+	"food-backend/src/constants"
 	"food-backend/src/handlers"
+	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -17,6 +19,12 @@ func SetupRoutes(app *fiber.App) {
 
 	auth.Post("/", handlers.AuthUser)
 	auth.Post("/refresh", handlers.RefreshTokens)
+
+	api.Use(jwtware.New(jwtware.Config{
+		SigningKey:  jwtware.SigningKey{Key: []byte(constants.AuthSignKey)},
+		TokenLookup: "cookie:token",
+	},
+	))
 
 	//	User
 	user := api.Group("/user")
