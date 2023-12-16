@@ -8,3 +8,11 @@ type FormAuth struct {
 func (f FormAuth) Validate() error {
 	return nil
 }
+
+type RefreshForm struct {
+	RefreshToken string `json:"refreshToken"`
+}
+
+func (f RefreshForm) Validate() error {
+	return nil
+}

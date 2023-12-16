@@ -3,10 +3,10 @@ package handlers
 import (
 	"food-backend/src/forms"
 	"food-backend/src/repositories"
+	"food-backend/src/services"
+	"food-backend/src/utils"
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 func AuthUser(ctx *fiber.Ctx) error {
@@ -14,7 +14,7 @@ func AuthUser(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(formAuth)
 
 	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err})
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err})
 	}
 
 	ur := new(repositories.UserRepository)
@@ -33,34 +33,62 @@ func AuthUser(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	if err != nil {
+		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+	}
+
 	// Generate tokens
 
-	token := jwt.New(jwt.SigningMethodHS512)
+	as := new(services.AuthService)
 
-	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = user.Id
-	claims["email"] = user.Email
-	claims["exp"] = time.Now().Add(time.Minute).Unix()
-
-	at, err := token.SignedString([]byte("3be9067a-0869-4291-ae46-1e943f05642a"))
+	t, err := as.GenerateTokens(user)
 	if err != nil {
-		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	rt, err := ur.SetRefreshToken(user.Id)
-
+	err = ur.SetRefreshToken(user.Id, t.RefreshToken)
 	if err != nil {
-		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": err.Error()})
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	// Return tokens
+	utils.SetTokensToCookies(ctx, *t)
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"token":        at,
-		"refreshToken": rt,
-	})
+	//return ctx.Status(fiber.StatusOK).JSON(t)
+	return ctx.SendStatus(fiber.StatusOK)
 }
 
-func RefreshTokens (ctx *fiber.Ctx) error {
-	return nil
+func RefreshTokens(ctx *fiber.Ctx) error {
+	// Get refresh token from cookies
+	form := new(forms.RefreshForm)
+
+	err := ctx.CookieParser(form)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	// Get user from db by refresh token
+
+	ur := new(repositories.UserRepository)
+
+	user, err := ur.GetByRefreshToken(form.RefreshToken)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	// Generate and update tokens
+	as := new(services.AuthService)
+
+	t, err := as.GenerateTokens(user)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	err = ur.SetRefreshToken(user.Id, t.RefreshToken)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	utils.SetTokensToCookies(ctx, *t)
+
+	return ctx.SendStatus(fiber.StatusOK)
 }
