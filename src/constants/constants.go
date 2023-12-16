@@ -4,10 +4,11 @@ import "time"
 
 const (
 	// Auth constants
-	AuthSignKey           = "3be9067a-0869-4291-ae46-1e943f05642a"
-	AuthTokenDuration     = time.Minute * 5
-	AuthRefreshTokenField = "refreshToken"
-	AuthAccessTokenField  = "token"
+	AuthSignKey              = "3be9067a-0869-4291-ae46-1e943f05642a"
+	AuthTokenDuration        = time.Minute * 5
+	AuthRefreshTokenDuration = time.Hour * 24 * 30
+	AuthRefreshTokenField    = "refreshToken"
+	AuthAccessTokenField     = "token"
 
 	// Tables and fields
 	//TableUsers          = "users"

@@ -11,13 +11,17 @@ func GetAuthTokenDuration() time.Time {
 	return time.Now().Add(constants.AuthTokenDuration)
 }
 
+func GetAuthRefreshTokenDuration() time.Time {
+	return time.Now().Add(constants.AuthRefreshTokenDuration)
+}
+
 func SetTokensToCookies(ctx *fiber.Ctx, t responses.ResponseTokens) {
 	ctx.Cookie(&fiber.Cookie{
 		Name:     constants.AuthRefreshTokenField,
 		Value:    t.RefreshToken,
 		Path:     "/",
 		Domain:   ctx.Hostname(),
-		Expires:  GetAuthTokenDuration(),
+		Expires:  GetAuthRefreshTokenDuration(),
 		HTTPOnly: true,
 		SameSite: "strict",
 	})

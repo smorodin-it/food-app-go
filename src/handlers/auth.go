@@ -53,7 +53,6 @@ func AuthUser(ctx *fiber.Ctx) error {
 
 	utils.SetTokensToCookies(ctx, *t)
 
-	//return ctx.Status(fiber.StatusOK).JSON(t)
 	return ctx.SendStatus(fiber.StatusOK)
 }
 
@@ -62,6 +61,11 @@ func RefreshTokens(ctx *fiber.Ctx) error {
 	form := new(forms.RefreshForm)
 
 	err := ctx.CookieParser(form)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	err = form.Validate()
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}

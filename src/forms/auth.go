@@ -1,5 +1,7 @@
 package forms
 
+import "errors"
+
 type FormAuth struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -14,5 +16,9 @@ type RefreshForm struct {
 }
 
 func (f RefreshForm) Validate() error {
+	if f.RefreshToken == "" {
+		return errors.New("bad refresh token")
+	}
+
 	return nil
 }
