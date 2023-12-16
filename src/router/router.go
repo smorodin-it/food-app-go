@@ -16,7 +16,7 @@ func SetupRoutes(app *fiber.App) {
 
 	auth := api.Group("/auth")
 
-	auth.Post("/", handlers.HandleAuth)
+	auth.Post("/", handlers.AuthUser)
 	auth.Post("/refresh", placeholderHandler)
 
 	//	User
