@@ -1,4 +1,54 @@
+basePath: /api
+definitions:
+  forms.FormAuth:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+host: 127.0.0.1:3000
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber Example API
+  version: "1.0"
+paths:
+  /auth:
+    post:
+      consumes:
+      - application/json
+      description: Get access and refresh tokens
+      parameters:
+      - description: Auth user
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/forms.FormAuth'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: Get Auth tokens using credentials
+      tags:
+      - Auth
+  /auth/refresh:
+    post:
+      description: Get access and refresh tokens
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+      summary: Get new tokens using refresh token
+      tags:
+      - Auth
 swagger: "2.0"
