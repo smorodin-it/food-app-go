@@ -17,7 +17,7 @@ func (r AuthService) GenerateTokens(user *domains.User) (*responses.ResponseToke
 	token := jwt.New(jwt.SigningMethodHS512)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = user.Id
+	claims["id"] = user.ID
 	claims["email"] = user.Email
 	claims["exp"] = utils.GetAuthTokenDuration().Unix()
 

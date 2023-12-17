@@ -55,7 +55,7 @@ func AuthUser(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	err = ur.SetRefreshToken(user.Id, t.RefreshToken)
+	err = ur.SetRefreshToken(user.ID, t.RefreshToken)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -103,7 +103,7 @@ func RefreshTokens(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	err = ur.SetRefreshToken(user.Id, t.RefreshToken)
+	err = ur.SetRefreshToken(user.ID, t.RefreshToken)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

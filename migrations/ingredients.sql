@@ -4,7 +4,7 @@ create table ingredients
     user_id      varchar(36)  not null,
     name         varchar(255) not null,
     manufacturer varchar(255) not null,
-    barcode      varchar(13),
+    barcode      varchar(13) unique,
     proteins     int,
     carbs        int,
     fats         int,

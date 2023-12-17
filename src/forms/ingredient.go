@@ -1,8 +1,6 @@
-package domains
+package forms
 
-type Ingredient struct {
-	ID           string  `json:"id"`
-	UserId       string  `json:"-"`
+type IngredientForm struct {
 	Name         string  `json:"name"`
 	Manufacturer string  `json:"manufacturer"`
 	Barcode      *string `json:"barcode"`
@@ -10,6 +8,4 @@ type Ingredient struct {
 	Carbs        string  `json:"carbs"`
 	Fats         string  `json:"fats"`
 	Calories     string  `json:"calories"`
-	CreatedAt    string  `json:"-"`
-	UpdatedAt    string  `json:"-"`
 }
