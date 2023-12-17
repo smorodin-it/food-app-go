@@ -27,9 +27,16 @@ func SetupRoutes(app *fiber.App) {
 	))
 
 	//	User
-	user := api.Group("/user")
-	user.Get("/", placeholderHandler)
-	user.Post("/", placeholderHandler)
-	user.Get("/:id", placeholderHandler)
-	user.Put("/:id", placeholderHandler)
+	//user := api.Group("/user")
+	//user.Get("/", placeholderHandler)
+	//user.Post("/", placeholderHandler)
+	//user.Get("/:id", placeholderHandler)
+	//user.Put("/:id", placeholderHandler)
+
+	// Ingredient
+	ingredient := api.Group("/ingredient")
+	ingredient.Get("/", handlers.IngredientList)
+	ingredient.Post("/", handlers.IngredientCreate)
+	ingredient.Get("/:id", placeholderHandler)
+	ingredient.Put("/:id", placeholderHandler)
 }

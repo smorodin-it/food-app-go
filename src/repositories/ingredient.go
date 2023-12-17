@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"fmt"
 	"food-backend/src/database"
 	"food-backend/src/domains"
 	"time"
@@ -10,30 +9,39 @@ import (
 type IngredientRepository struct {
 }
 
-func (r IngredientRepository) List(page int, perPage int) (*[]domains.Ingredient, error) {
-	model := new([]domains.Ingredient)
+func (r IngredientRepository) List(page int, perPage int) (ingredients []domains.Ingredient, err error) {
 
-	sql := "SELECT * FROM ingredients ORDER BY updated_at DESC LIMIT $1 OFFSET $2"
+	var offset int
 
-	offset := page * perPage
+	// offset по факту это limit *(page-1) если page>=1
 
-	err := database.DBCon.Select(model, sql, perPage, offset)
-	if err != nil {
-		return nil, err
+	if page >= 1 && perPage > 0 {
+		offset = perPage * (page - 1)
+		sql := "SELECT * FROM ingredients ORDER BY updated_at DESC LIMIT $1 OFFSET $2"
+
+		err = database.DBCon.Select(&ingredients, sql, perPage, offset)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		sql := "SELECT * FROM ingredients ORDER BY updated_at DESC"
+
+		err = database.DBCon.Select(&ingredients, sql)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	return model, nil
+	return ingredients, nil
 }
 
 func (r IngredientRepository) Create(ingredient *domains.Ingredient, userId string) (*string, error) {
 	sql := "INSERT INTO ingredients (id, user_id, name, manufacturer, barcode, proteins, carbs, fats, calories) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)"
-	data, err := database.DBCon.Exec(sql, ingredient.ID, userId, ingredient.Name, ingredient.Manufacturer, ingredient.Barcode,
+	_, err := database.DBCon.Exec(sql, ingredient.ID, userId, ingredient.Name, ingredient.Manufacturer, ingredient.Barcode,
 		ingredient.Proteins, ingredient.Carbs, ingredient.Fats, ingredient.Calories)
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(data)
 
 	return &ingredient.ID, nil
 }

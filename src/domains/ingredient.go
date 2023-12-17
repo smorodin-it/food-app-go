@@ -1,15 +1,17 @@
 package domains
 
+import "time"
+
 type Ingredient struct {
-	ID           string  `json:"id"`
-	UserId       string  `json:"-"`
-	Name         string  `json:"name"`
-	Manufacturer string  `json:"manufacturer"`
-	Barcode      *string `json:"barcode"`
-	Proteins     string  `json:"proteins"`
-	Carbs        string  `json:"carbs"`
-	Fats         string  `json:"fats"`
-	Calories     string  `json:"calories"`
-	CreatedAt    string  `json:"-"`
-	UpdatedAt    string  `json:"-"`
+	ID           string    `json:"id" db:"id"`
+	UserId       string    `json:"-" db:"user_id"`
+	Name         string    `json:"name" db:"name"`
+	Manufacturer string    `json:"manufacturer" db:"manufacturer"`
+	Barcode      *string   `json:"barcode" db:"barcode"`
+	Proteins     int       `json:"proteins" db:"proteins"`
+	Carbs        int       `json:"carbs" db:"carbs"`
+	Fats         int       `json:"fats" db:"fats"`
+	Calories     int       `json:"calories" db:"calories"`
+	CreatedAt    time.Time `json:"-" db:"created_at"`
+	UpdatedAt    time.Time `json:"-" db:"updated_at"`
 }

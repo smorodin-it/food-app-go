@@ -11,7 +11,7 @@ type IngredientService struct {
 	r repositories.IngredientRepository
 }
 
-func (s IngredientService) List(page int, perPage int) (ingredients *[]domains.Ingredient, err error) {
+func (s IngredientService) List(page int, perPage int) (ingredients []domains.Ingredient, err error) {
 	ingredients, err = s.r.List(page, perPage)
 	if err != nil {
 		return nil, err
