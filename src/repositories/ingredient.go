@@ -13,8 +13,6 @@ func (r IngredientRepository) List(page int, perPage int) (ingredients []domains
 
 	var offset int
 
-	// offset по факту это limit *(page-1) если page>=1
-
 	if page >= 1 && perPage > 0 {
 		offset = perPage * (page - 1)
 		sql := "SELECT * FROM ingredients ORDER BY updated_at DESC LIMIT $1 OFFSET $2"
