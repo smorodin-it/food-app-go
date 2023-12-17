@@ -3,6 +3,7 @@ package repositories
 import (
 	"food-backend/src/database"
 	"food-backend/src/domains"
+	"food-backend/src/utils"
 	"time"
 )
 
@@ -11,23 +12,18 @@ type IngredientRepository struct {
 
 func (r IngredientRepository) List(page int, perPage int) (ingredients []domains.Ingredient, err error) {
 
-	var offset int
+	limit, offset, withPagination := utils.CalcPagination(page, perPage)
 
-	if page >= 1 && perPage > 0 {
-		offset = perPage * (page - 1)
+	if withPagination {
 		sql := "SELECT * FROM ingredients ORDER BY updated_at DESC LIMIT $1 OFFSET $2"
-
-		err = database.DBCon.Select(&ingredients, sql, perPage, offset)
-		if err != nil {
-			return nil, err
-		}
+		err = database.DBCon.Select(&ingredients, sql, limit, offset)
 	} else {
 		sql := "SELECT * FROM ingredients ORDER BY updated_at DESC"
-
 		err = database.DBCon.Select(&ingredients, sql)
-		if err != nil {
-			return nil, err
-		}
+	}
+
+	if err != nil {
+		return nil, err
 	}
 
 	return ingredients, nil
