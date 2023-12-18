@@ -44,6 +44,6 @@ func SetupRoutes(app *fiber.App) {
 	meal := api.Group("/meal")
 	meal.Get("/", handlers.MealList)
 	meal.Post("/", handlers.MealCreate)
-	meal.Get("/:id", placeholderHandler)
+	meal.Get("/:id", handlers.MealRetrieve)
 	meal.Put("/:id", placeholderHandler)
 }

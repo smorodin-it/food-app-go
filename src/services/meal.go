@@ -38,3 +38,13 @@ func (s MealService) Create(f forms.MealForm, userId string) (id *string, err er
 
 	return id, nil
 }
+
+func (s MealService) Retrieve(id string) (meal *domains.Meal, err error) {
+	meal, err = s.r.Retrieve(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return meal, nil
+
+}

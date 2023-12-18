@@ -40,3 +40,16 @@ func (r MealRepository) Create(meal domains.Meal) (id *string, err error) {
 	return &meal.ID, nil
 
 }
+
+func (r MealRepository) Retrieve(id string) (meal *domains.Meal, err error) {
+	meal = &domains.Meal{}
+
+	sql := "SELECT * FROM meals WHERE id = $1"
+
+	err = database.DBCon.Get(meal, sql, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return meal, nil
+}
