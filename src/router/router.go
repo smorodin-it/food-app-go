@@ -38,5 +38,5 @@ func SetupRoutes(app *fiber.App) {
 	ingredient.Get("/", handlers.IngredientList)
 	ingredient.Post("/", handlers.IngredientCreate)
 	ingredient.Get("/:id", handlers.IngredientRetrieve)
-	ingredient.Put("/:id", placeholderHandler)
+	ingredient.Put("/:id", handlers.IngredientUpdate)
 }

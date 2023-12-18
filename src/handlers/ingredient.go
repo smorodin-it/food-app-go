@@ -67,3 +67,27 @@ func IngredientRetrieve(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusOK).JSON(ingredient)
 }
+
+func IngredientUpdate(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if id == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "bad id"})
+	}
+
+	f := new(forms.IngredientForm)
+
+	err := ctx.BodyParser(f)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	is := new(services.IngredientService)
+
+	err = is.Update(f, id)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": true})
+}

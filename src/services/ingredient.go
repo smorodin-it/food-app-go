@@ -50,8 +50,9 @@ func (s IngredientService) Create(form *forms.IngredientForm, userId string) (id
 	return id, nil
 }
 
-func (s IngredientService) Update(form *forms.IngredientForm) (err error) {
+func (s IngredientService) Update(form *forms.IngredientForm, id string) (err error) {
 	model := domains.Ingredient{
+		ID:           id,
 		Name:         form.Name,
 		Manufacturer: form.Manufacturer,
 		Barcode:      form.Barcode,
