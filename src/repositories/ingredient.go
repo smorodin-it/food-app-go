@@ -65,11 +65,10 @@ func (r IngredientRepository) Retrieve(id string) (*domains.Ingredient, error) {
 }
 
 func (r IngredientRepository) GetByBarcode(barcode *string) (*domains.Ingredient, error) {
-	model := new(domains.Ingredient)
-
-	sql := "SELECT * FROM ingredients WHERE barcode = $1"
-
 	if barcode != nil {
+		model := new(domains.Ingredient)
+
+		sql := "SELECT * FROM ingredients WHERE barcode = $1"
 		err := database.DBCon.Get(model, sql, barcode)
 		if err != nil {
 			return nil, err
