@@ -63,3 +63,24 @@ func MealRetrieve(ctx *fiber.Ctx) error {
 
 	return ctx.Status(fiber.StatusOK).JSON(meal)
 }
+
+func MealUpdate(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if id == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "bad id"})
+	}
+
+	f := new(forms.MealForm)
+	err := ctx.BodyParser(f)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	ms := new(services.MealService)
+	err = ms.Update(*f, id)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": true})
+}

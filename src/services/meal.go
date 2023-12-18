@@ -27,8 +27,6 @@ func (s MealService) Create(f forms.MealForm, userId string) (id *string, err er
 		UserId:      userId,
 		Name:        f.Name,
 		TotalWeight: f.TotalWeight,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
 	}
 
 	id, err = s.r.Create(m)
@@ -47,4 +45,19 @@ func (s MealService) Retrieve(id string) (meal *domains.Meal, err error) {
 
 	return meal, nil
 
+}
+
+func (s MealService) Update(f forms.MealForm, id string) (err error) {
+	m := domains.Meal{
+		Name:        f.Name,
+		TotalWeight: f.TotalWeight,
+		UpdatedAt:   time.Now(),
+	}
+
+	err = s.r.Update(m, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

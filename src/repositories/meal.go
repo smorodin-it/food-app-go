@@ -5,6 +5,7 @@ import (
 	"food-backend/src/database"
 	"food-backend/src/domains"
 	"food-backend/src/utils"
+	"time"
 )
 
 type MealRepository struct {
@@ -52,4 +53,15 @@ func (r MealRepository) Retrieve(id string) (meal *domains.Meal, err error) {
 	}
 
 	return meal, nil
+}
+
+func (r MealRepository) Update(meal domains.Meal, id string) (err error) {
+	sql := "UPDATE meals SET name = $1, total_weight = $2, created_at = $3 WHERE id = $4"
+
+	_, err = database.DBCon.Exec(sql, meal.Name, meal.TotalWeight, time.Now(), id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
