@@ -39,4 +39,11 @@ func SetupRoutes(app *fiber.App) {
 	ingredient.Post("/", handlers.IngredientCreate)
 	ingredient.Get("/:id", handlers.IngredientRetrieve)
 	ingredient.Put("/:id", handlers.IngredientUpdate)
+
+	// Meal
+	meal := api.Group("/meal")
+	meal.Get("/", handlers.MealList)
+	meal.Post("/", handlers.MealCreate)
+	meal.Get("/:id", placeholderHandler)
+	meal.Put("/:id", placeholderHandler)
 }

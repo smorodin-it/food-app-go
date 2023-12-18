@@ -11,7 +11,6 @@ type IngredientRepository struct {
 }
 
 func (r IngredientRepository) List(page int, perPage int) (ingredients []domains.Ingredient, err error) {
-
 	limit, offset, withPagination := utils.CalcPagination(page, perPage)
 
 	if withPagination {
@@ -31,6 +30,7 @@ func (r IngredientRepository) List(page int, perPage int) (ingredients []domains
 
 func (r IngredientRepository) Create(ingredient *domains.Ingredient, userId string) (*string, error) {
 	sql := "INSERT INTO ingredients (id, user_id, name, manufacturer, barcode, proteins, carbs, fats, calories) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)"
+
 	_, err := database.DBCon.Exec(sql, ingredient.ID, userId, ingredient.Name, ingredient.Manufacturer, ingredient.Barcode,
 		ingredient.Proteins, ingredient.Carbs, ingredient.Fats, ingredient.Calories)
 	if err != nil {
