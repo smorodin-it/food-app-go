@@ -35,3 +35,17 @@ func SetTokensToCookies(ctx *fiber.Ctx, t responses.ResponseTokens) {
 		SameSite: "strict",
 	})
 }
+
+func CalcPagination(page int, perPage int) (limit int, offset int, withPagination bool) {
+	if page >= 1 && perPage > 0 {
+		offset = perPage * (page - 1)
+		withPagination = true
+	} else {
+		offset = 0
+		withPagination = false
+	}
+
+	limit = perPage
+
+	return limit, offset, withPagination
+}
