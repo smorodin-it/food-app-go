@@ -20,7 +20,7 @@ func (u UserRepository) GetByEmail(email string) (*domains.User, error) {
 }
 
 func (u UserRepository) SetRefreshToken(id string, refreshToken string) error {
-	sql := "UPDATE users SET refresh_token = $1 WHERE id = $2"
+	sql := "UPDATE users SET refresh_token = $1 WHERE user_id = $2"
 
 	_, err := database.DBCon.Exec(sql, refreshToken, id)
 	if err != nil {

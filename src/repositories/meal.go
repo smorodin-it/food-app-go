@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"fmt"
 	"food-backend/src/database"
 	"food-backend/src/domains"
 	"food-backend/src/utils"
@@ -29,23 +28,20 @@ func (r MealRepository) List(page int, perPage int) (meals []domains.Meal, err e
 }
 
 func (r MealRepository) Create(meal domains.Meal) (id *string, err error) {
-	sql := "INSERT INTO meals (id, user_id, name, total_weight) VALUES ($1, $2, $3, $4)"
+	sql := "INSERT INTO meals (meal_id, user_id, meal_name, total_weight) VALUES ($1, $2, $3, $4)"
 
-	result, err := database.DBCon.Exec(sql, meal.ID, meal.UserId, meal.Name, meal.TotalWeight)
+	_, err = database.DBCon.Exec(sql, meal.MealID, meal.UserID, meal.MealName, meal.TotalWeight)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println(result)
-
-	return &meal.ID, nil
-
+	return &meal.MealID, nil
 }
 
 func (r MealRepository) Retrieve(id string) (meal *domains.Meal, err error) {
 	meal = &domains.Meal{}
 
-	sql := "SELECT * FROM meals WHERE id = $1"
+	sql := "SELECT * FROM meals WHERE meal_id = $1"
 
 	err = database.DBCon.Get(meal, sql, id)
 	if err != nil {
@@ -56,9 +52,43 @@ func (r MealRepository) Retrieve(id string) (meal *domains.Meal, err error) {
 }
 
 func (r MealRepository) Update(meal domains.Meal, id string) (err error) {
-	sql := "UPDATE meals SET name = $1, total_weight = $2, created_at = $3 WHERE id = $4"
+	sql := "UPDATE meals SET meal_name = $1, total_weight = $2, created_at = $3 WHERE meal_id = $4"
 
-	_, err = database.DBCon.Exec(sql, meal.Name, meal.TotalWeight, time.Now(), id)
+	_, err = database.DBCon.Exec(sql, meal.MealName, meal.TotalWeight, time.Now(), id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//func (r MealRepository) ListIngredients(mealId string) (ingredients *[]domains.Ingredient, err error) {
+//	sql := ""
+//}
+
+func (r MealRepository) AddIngredient(mi domains.MealsIngredient) (id *string, err error) {
+	sql := "INSERT INTO meals_ingredients (id, meal_id, ingredient_id, ingredient_weight) VALUES ($1, $2, $3, $4)"
+	_, err = database.DBCon.Exec(sql, mi.ID, mi.MealId, mi.IngredientId, mi.IngredientWeight)
+	if err != nil {
+		return nil, err
+	}
+
+	return id, err
+}
+
+func (r MealRepository) UpdateIngredient(mi domains.MealsIngredient) (err error) {
+	sql := "UPDATE meals_ingredients SET ingredient_weight = $1, updated_at = $2 WHERE id = $3"
+	_, err = database.DBCon.Exec(sql, mi.IngredientWeight, time.Now(), mi.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r MealRepository) DeleteIngredient(id string) (err error) {
+	sql := "DELETE FROM meals_ingredients WHERE id = $1"
+	_, err = database.DBCon.Exec(sql, id)
 	if err != nil {
 		return err
 	}

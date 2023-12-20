@@ -31,15 +31,15 @@ func (s IngredientService) Retrieve(id string) (ingredient *domains.Ingredient, 
 
 func (s IngredientService) Create(form *forms.IngredientForm, userId string) (id *string, err error) {
 	model := domains.Ingredient{
-		ID:           uuid.New().String(),
-		UserId:       userId,
-		Name:         form.Name,
-		Manufacturer: form.Manufacturer,
-		Barcode:      form.Barcode,
-		Proteins:     form.Proteins,
-		Carbs:        form.Carbs,
-		Fats:         form.Fats,
-		Calories:     form.Calories,
+		IngredientID:   uuid.New().String(),
+		UserId:         userId,
+		IngredientName: form.Name,
+		Manufacturer:   form.Manufacturer,
+		Barcode:        form.Barcode,
+		Proteins:       form.Proteins,
+		Carbs:          form.Carbs,
+		Fats:           form.Fats,
+		Calories:       form.Calories,
 	}
 
 	id, err = s.r.Create(&model, userId)
@@ -52,14 +52,14 @@ func (s IngredientService) Create(form *forms.IngredientForm, userId string) (id
 
 func (s IngredientService) Update(form *forms.IngredientForm, id string) (err error) {
 	model := domains.Ingredient{
-		ID:           id,
-		Name:         form.Name,
-		Manufacturer: form.Manufacturer,
-		Barcode:      form.Barcode,
-		Proteins:     form.Proteins,
-		Carbs:        form.Carbs,
-		Fats:         form.Fats,
-		Calories:     form.Calories,
+		IngredientID:   id,
+		IngredientName: form.Name,
+		Manufacturer:   form.Manufacturer,
+		Barcode:        form.Barcode,
+		Proteins:       form.Proteins,
+		Carbs:          form.Carbs,
+		Fats:           form.Fats,
+		Calories:       form.Calories,
 	}
 
 	err = s.r.Update(&model)

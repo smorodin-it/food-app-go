@@ -23,9 +23,9 @@ func (s MealService) List(page int, perPage int) (meals []domains.Meal, err erro
 
 func (s MealService) Create(f forms.MealForm, userId string) (id *string, err error) {
 	m := domains.Meal{
-		ID:          uuid.New().String(),
-		UserId:      userId,
-		Name:        f.Name,
+		MealID:      uuid.New().String(),
+		UserID:      userId,
+		MealName:    f.Name,
 		TotalWeight: f.TotalWeight,
 	}
 
@@ -49,7 +49,7 @@ func (s MealService) Retrieve(id string) (meal *domains.Meal, err error) {
 
 func (s MealService) Update(f forms.MealForm, id string) (err error) {
 	m := domains.Meal{
-		Name:        f.Name,
+		MealName:    f.Name,
 		TotalWeight: f.TotalWeight,
 		UpdatedAt:   time.Now(),
 	}
