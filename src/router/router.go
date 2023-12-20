@@ -42,7 +42,8 @@ func SetupRoutes(app *fiber.App) {
 
 	// Meal
 	meal := api.Group("/meal")
-	meal.Get("/", handlers.MealList)
+	meal.Get("/", handlers.MealListByUser)
+	meal.Get("/all", handlers.MealList)
 	meal.Post("/", handlers.MealCreate)
 	meal.Get("/:id", handlers.MealRetrieve)
 	meal.Put("/:id", handlers.MealUpdate)

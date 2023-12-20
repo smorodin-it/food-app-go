@@ -15,11 +15,28 @@ func (r MealRepository) List(page int, perPage int) (meals []domains.Meal, err e
 	limit, offset, withPagination := utils.CalcPagination(page, perPage)
 
 	if withPagination {
-		sql := "SELECT * FROM meals ORDER BY updated_at DESC LIMIT $1 OFFSET $2"
+		sql := "SELECT * FROM meals ORDER BY created_at DESC LIMIT $1 OFFSET $2"
 		err = database.DBCon.Select(&meals, sql, limit, offset)
 	} else {
-		sql := "SELECT * FROM meals ORDER BY updated_at DESC"
+		sql := "SELECT * FROM meals ORDER BY created_at DESC"
 		err = database.DBCon.Select(&meals, sql)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return meals, nil
+}
+
+func (r MealRepository) ListByUser(userId string, page int, perPage int) (meals []domains.Meal, err error) {
+	limit, offset, withPagination := utils.CalcPagination(page, perPage)
+
+	if withPagination {
+		sql := "SELECT * FROM meals WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3"
+		err = database.DBCon.Select(&meals, sql, userId, limit, offset)
+	} else {
+		sql := "SELECT * FROM meals WHERE user_id = $1 ORDER BY created_at DESC"
+		err = database.DBCon.Select(&meals, sql, userId)
 	}
 	if err != nil {
 		return nil, err

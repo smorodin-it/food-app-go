@@ -4,6 +4,7 @@ import (
 	"food-backend/src/constants"
 	"food-backend/src/responses"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 	"time"
 )
 
@@ -48,4 +49,8 @@ func CalcPagination(page int, perPage int) (limit int, offset int, withPaginatio
 	limit = perPage
 
 	return limit, offset, withPagination
+}
+
+func GetUserIDFromToken(ctx *fiber.Ctx) string {
+	return ctx.Locals("user").(*jwt.Token).Claims.(jwt.MapClaims)["id"].(string)
 }

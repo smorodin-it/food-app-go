@@ -3,6 +3,7 @@ package handlers
 import (
 	"food-backend/src/forms"
 	"food-backend/src/services"
+	"food-backend/src/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -16,6 +17,25 @@ func MealList(ctx *fiber.Ctx) error {
 
 	ms := new(services.MealService)
 	meals, err := ms.List(q.Page, q.PerPage)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(meals)
+}
+
+func MealListByUser(ctx *fiber.Ctx) error {
+	userId := utils.GetUserIDFromToken(ctx)
+
+	q := new(forms.PaginationQuery)
+
+	err := ctx.QueryParser(q)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	ms := new(services.MealService)
+	meals, err := ms.ListByUser(userId, q.Page, q.PerPage)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

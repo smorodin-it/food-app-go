@@ -22,6 +22,15 @@ func (s MealService) List(page int, perPage int) (meals []domains.Meal, err erro
 	return meals, nil
 }
 
+func (s MealService) ListByUser(userId string, page int, perPage int) (meals []domains.Meal, err error) {
+	meals, err = s.r.ListByUser(userId, page, perPage)
+	if err != nil {
+		return nil, err
+	}
+
+	return meals, nil
+}
+
 func (s MealService) Create(f forms.MealForm, userId string) (id *string, err error) {
 	m := domains.Meal{
 		MealID:      uuid.New().String(),
