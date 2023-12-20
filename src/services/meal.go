@@ -4,6 +4,7 @@ import (
 	"food-backend/src/domains"
 	"food-backend/src/forms"
 	"food-backend/src/repositories"
+	"food-backend/src/responses"
 	"github.com/google/uuid"
 	"time"
 )
@@ -60,4 +61,29 @@ func (s MealService) Update(f forms.MealForm, id string) (err error) {
 	}
 
 	return nil
+}
+
+func (s MealService) AddIngredient(f forms.MealIngredientForm) (id *string, err error) {
+	m := domains.MealsIngredient{
+		ID:               uuid.New().String(),
+		MealId:           f.MealID,
+		IngredientId:     f.IngredientID,
+		IngredientWeight: f.TotalWeight,
+	}
+
+	id, err = s.r.AddIngredient(m)
+	if err != nil {
+		return nil, err
+	}
+
+	return id, nil
+}
+
+func (s MealService) ListIngredients(mealId string) (ingredients *[]responses.MealIngredientResp, err error) {
+	i, err := s.r.ListIngredients(mealId)
+	if err != nil {
+		return nil, err
+	}
+
+	return i, nil
 }
