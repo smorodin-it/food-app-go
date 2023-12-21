@@ -72,8 +72,8 @@ func (s MealService) Update(f forms.MealForm, id string) (err error) {
 	return nil
 }
 
-func (s MealService) AddIngredient(f forms.MealIngredientForm) (id *string, err error) {
-	m := domains.MealsIngredient{
+func (s MealService) AddIngredient(f forms.MealIngredientAddForm) (id *string, err error) {
+	m := domains.MealsIngredientAdd{
 		ID:               uuid.New().String(),
 		MealId:           f.MealID,
 		IngredientId:     f.IngredientID,
@@ -95,4 +95,27 @@ func (s MealService) ListIngredients(mealId string) (ingredients *[]responses.Me
 	}
 
 	return i, nil
+}
+
+func (s MealService) UpdateIngredient(id string, f forms.MealIngredientUpdateForm) error {
+	m := &domains.MealsIngredientUpdate{
+		ID:               id,
+		IngredientWeight: f.TotalWeight,
+	}
+
+	err := s.r.UpdateIngredient(*m)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s MealService) DeleteIngredient(id string) error {
+	err := s.r.DeleteIngredient(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

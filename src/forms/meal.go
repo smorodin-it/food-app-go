@@ -8,11 +8,18 @@ type MealForm struct {
 func (f MealForm) Validate() {
 }
 
-type MealIngredientForm struct {
+type MealIngredientAddForm struct {
 	MealID       string `json:"mealId"`
 	IngredientID string `json:"ingredientId"`
 	TotalWeight  int    `json:"totalWeight"`
 }
 
-func (f MealIngredientForm) Validate() {
+func (f MealIngredientAddForm) Validate() {
+}
+
+type MealIngredientUpdateForm struct {
+	TotalWeight int `json:"totalWeight"`
+}
+
+func (f MealIngredientUpdateForm) Validate() {
 }

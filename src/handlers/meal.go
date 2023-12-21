@@ -106,7 +106,7 @@ func MealUpdate(ctx *fiber.Ctx) error {
 }
 
 func MealAddIngredient(ctx *fiber.Ctx) error {
-	f := new(forms.MealIngredientForm)
+	f := new(forms.MealIngredientAddForm)
 
 	err := ctx.BodyParser(f)
 	if err != nil {
@@ -135,4 +135,40 @@ func MealListIngredients(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(i)
+}
+
+func MealIngredientUpdate(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if id == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "bad id"})
+	}
+
+	f := new(forms.MealIngredientUpdateForm)
+	err := ctx.BodyParser(f)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	ms := new(services.MealService)
+	err = ms.UpdateIngredient(id, *f)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": true})
+}
+
+func MealIngredientDelete(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if id == "" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "bad id"})
+	}
+
+	ms := new(services.MealService)
+	err := ms.DeleteIngredient(id)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": true})
 }
