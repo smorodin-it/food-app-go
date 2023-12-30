@@ -228,7 +228,7 @@ func MealIngredientUpdate(ctx *fiber.Ctx) error {
 // @Summary Delete ingredient from meal
 // @Description Delete ingredient from meal
 // @Tags Meal
-// @Param request path string true "id"
+// @Param request path string true "ingredient in meal id"
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
 // @Router /meal/ingredient/${id} [delete]
