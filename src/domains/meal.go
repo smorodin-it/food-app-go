@@ -11,11 +11,16 @@ type Meal struct {
 	UpdatedAt   time.Time `json:"-" db:"updated_at"`
 }
 
-type MealsIngredient struct {
+type MealsIngredientAdd struct {
 	ID               string    `json:"id" db:"id"`
 	MealId           string    `json:"mealId" db:"meal_id"`
 	IngredientId     string    `json:"ingredientId" db:"ingredient_id"`
 	IngredientWeight int       `json:"ingredientWeight" db:"ingredient_weight"`
 	CreatedAt        time.Time `json:"-" db:"created_at" db:"created_at"`
 	UpdatedAt        time.Time `json:"-" db:"updated_at" db:"updated_at"`
+}
+
+type MealsIngredientUpdate struct {
+	ID               string `json:"id" db:"id"`
+	IngredientWeight int    `json:"ingredientWeight" db:"ingredient_weight"`
 }

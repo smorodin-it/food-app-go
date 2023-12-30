@@ -83,7 +83,7 @@ func (r MealRepository) Update(meal domains.Meal, id string) (err error) {
 func (r MealRepository) ListIngredients(mealId string) (ingredients *[]responses.MealIngredientResp, err error) {
 	ingredients = new([]responses.MealIngredientResp)
 
-	sql := "SELECT i.ingredient_id, i.ingredient_name, mi.ingredient_weight FROM meals_ingredients as mi INNER JOIN ingredients AS i ON mi.ingredient_id = i.ingredient_id WHERE mi.meal_id = $1"
+	sql := "SELECT mi.id, i.ingredient_name, mi.ingredient_weight FROM meals_ingredients as mi INNER JOIN ingredients AS i ON mi.ingredient_id = i.ingredient_id WHERE mi.meal_id = $1"
 
 	err = database.DBCon.Select(ingredients, sql, mealId)
 	if err != nil {
@@ -93,7 +93,7 @@ func (r MealRepository) ListIngredients(mealId string) (ingredients *[]responses
 	return ingredients, nil
 }
 
-func (r MealRepository) AddIngredient(mi domains.MealsIngredient) (id *string, err error) {
+func (r MealRepository) AddIngredient(mi domains.MealsIngredientAdd) (id *string, err error) {
 	sql := "INSERT INTO meals_ingredients (id, meal_id, ingredient_id, ingredient_weight) VALUES ($1, $2, $3, $4)"
 	_, err = database.DBCon.Exec(sql, mi.ID, mi.MealId, mi.IngredientId, mi.IngredientWeight)
 	if err != nil {
@@ -103,7 +103,7 @@ func (r MealRepository) AddIngredient(mi domains.MealsIngredient) (id *string, e
 	return &mi.IngredientId, nil
 }
 
-func (r MealRepository) UpdateIngredient(mi domains.MealsIngredient) (err error) {
+func (r MealRepository) UpdateIngredient(mi domains.MealsIngredientUpdate) (err error) {
 	sql := "UPDATE meals_ingredients SET ingredient_weight = $1, updated_at = $2 WHERE id = $3"
 	_, err = database.DBCon.Exec(sql, mi.IngredientWeight, time.Now(), mi.ID)
 	if err != nil {
