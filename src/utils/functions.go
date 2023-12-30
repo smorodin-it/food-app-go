@@ -54,3 +54,11 @@ func CalcPagination(page int, perPage int) (limit int, offset int, withPaginatio
 func GetUserIDFromToken(ctx *fiber.Ctx) string {
 	return ctx.Locals("user").(*jwt.Token).Claims.(jwt.MapClaims)["id"].(string)
 }
+
+func GetResponseAdd(ctx *fiber.Ctx, id string) error {
+	return ctx.Status(fiber.StatusCreated).JSON(responses.ResponseAdd{Id: id})
+}
+
+func GetResponseStatus(ctx *fiber.Ctx, status bool) error {
+	return ctx.Status(fiber.StatusCreated).JSON(responses.ResponseStatus{Status: status})
+}

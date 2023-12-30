@@ -70,9 +70,167 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/ingredient": {
+            "get": {
+                "description": "Get ingredients list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ingredient"
+                ],
+                "summary": "Get ingredients list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "perPage",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domains.Ingredient"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new ingredient",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ingredient"
+                ],
+                "summary": "Create new ingredient",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/forms.IngredientForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseAdd"
+                        }
+                    }
+                }
+            }
+        },
+        "/ingredient/{id}": {
+            "get": {
+                "description": "Retrieve ingredient by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ingredient"
+                ],
+                "summary": "Retrieve ingredient by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.Ingredient"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update ingredient",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ingredient"
+                ],
+                "summary": "Update ingredient",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/forms.IngredientForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseStatus"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "domains.Ingredient": {
+            "type": "object",
+            "properties": {
+                "barcode": {
+                    "type": "string"
+                },
+                "calories": {
+                    "type": "integer"
+                },
+                "carbs": {
+                    "type": "integer"
+                },
+                "fats": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "manufacturer": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "proteins": {
+                    "type": "integer"
+                }
+            }
+        },
         "forms.FormAuth": {
             "type": "object",
             "properties": {
@@ -81,6 +239,48 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                }
+            }
+        },
+        "forms.IngredientForm": {
+            "type": "object",
+            "properties": {
+                "barcode": {
+                    "type": "string"
+                },
+                "calories": {
+                    "type": "integer"
+                },
+                "carbs": {
+                    "type": "integer"
+                },
+                "fats": {
+                    "type": "integer"
+                },
+                "manufacturer": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "proteins": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.ResponseAdd": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ResponseStatus": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean"
                 }
             }
         }

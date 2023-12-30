@@ -1,11 +1,57 @@
 basePath: /api
 definitions:
+  domains.Ingredient:
+    properties:
+      barcode:
+        type: string
+      calories:
+        type: integer
+      carbs:
+        type: integer
+      fats:
+        type: integer
+      id:
+        type: string
+      manufacturer:
+        type: string
+      name:
+        type: string
+      proteins:
+        type: integer
+    type: object
   forms.FormAuth:
     properties:
       email:
         type: string
       password:
         type: string
+    type: object
+  forms.IngredientForm:
+    properties:
+      barcode:
+        type: string
+      calories:
+        type: integer
+      carbs:
+        type: integer
+      fats:
+        type: integer
+      manufacturer:
+        type: string
+      name:
+        type: string
+      proteins:
+        type: integer
+    type: object
+  responses.ResponseAdd:
+    properties:
+      id:
+        type: string
+    type: object
+  responses.ResponseStatus:
+    properties:
+      status:
+        type: boolean
     type: object
 host: 127.0.0.1:3000
 info:
@@ -51,4 +97,88 @@ paths:
       summary: Get new tokens using refresh token
       tags:
       - Auth
+  /ingredient:
+    get:
+      description: Get ingredients list
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domains.Ingredient'
+            type: array
+      summary: Get ingredients list
+      tags:
+      - Ingredient
+    post:
+      description: Create new ingredient
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forms.IngredientForm'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ResponseAdd'
+      summary: Create new ingredient
+      tags:
+      - Ingredient
+  /ingredient/{id}:
+    get:
+      description: Retrieve ingredient by id
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domains.Ingredient'
+      summary: Retrieve ingredient by id
+      tags:
+      - Ingredient
+    put:
+      description: Update ingredient
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forms.IngredientForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseStatus'
+      summary: Update ingredient
+      tags:
+      - Ingredient
 swagger: "2.0"

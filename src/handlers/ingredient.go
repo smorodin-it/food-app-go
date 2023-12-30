@@ -3,9 +3,18 @@ package handlers
 import (
 	"food-backend/src/forms"
 	"food-backend/src/services"
+	"food-backend/src/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
+// IngredientList is a function to get list of all ingredients
+// @Summary Get ingredients list
+// @Description Get ingredients list
+// @Tags Ingredient
+// @Param request query forms.PaginationQuery true "pagination"
+// @Produce json
+// @Success 200 {object} []domains.Ingredient
+// @Router /ingredient [get]
 func IngredientList(ctx *fiber.Ctx) error {
 	q := new(forms.PaginationQuery)
 
@@ -28,6 +37,14 @@ func IngredientList(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(list)
 }
 
+// IngredientCreate is a function to create new ingredient
+// @Summary Create new ingredient
+// @Description Create new ingredient
+// @Tags Ingredient
+// @Param request body forms.IngredientForm true "body"
+// @Produce json
+// @Success 201 {object} responses.ResponseAdd
+// @Router /ingredient [post]
 func IngredientCreate(ctx *fiber.Ctx) error {
 	f := new(forms.IngredientForm)
 	err := ctx.BodyParser(f)
@@ -47,9 +64,17 @@ func IngredientCreate(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"id": id})
+	return utils.GetResponseAdd(ctx, *id)
 }
 
+// IngredientRetrieve is a function to get ingredient by id
+// @Summary Retrieve ingredient by id
+// @Description Retrieve ingredient by id
+// @Tags Ingredient
+// @Param request path string true "id"
+// @Produce json
+// @Success 200 {object} domains.Ingredient
+// @Router /ingredient/{id} [get]
 func IngredientRetrieve(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {
@@ -68,6 +93,15 @@ func IngredientRetrieve(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(ingredient)
 }
 
+// IngredientUpdate is a function to update ingredient by id
+// @Summary Update ingredient
+// @Description Update ingredient
+// @Tags Ingredient
+// @Param request path string true "id"
+// @Param request body forms.IngredientForm true "body"
+// @Produce json
+// @Success 200 {object} responses.ResponseStatus
+// @Router /ingredient/{id} [put]
 func IngredientUpdate(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {
@@ -89,5 +123,5 @@ func IngredientUpdate(ctx *fiber.Ctx) error {
 
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": true})
+	return utils.GetResponseStatus(ctx, true)
 }
