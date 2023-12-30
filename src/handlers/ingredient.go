@@ -74,7 +74,7 @@ func IngredientCreate(ctx *fiber.Ctx) error {
 // @Param request path string true "id"
 // @Produce json
 // @Success 200 {object} domains.Ingredient
-// @Router /ingredient/{id} [get]
+// @Router /ingredient/${id} [get]
 func IngredientRetrieve(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {
@@ -101,7 +101,7 @@ func IngredientRetrieve(ctx *fiber.Ctx) error {
 // @Param request body forms.IngredientForm true "body"
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
-// @Router /ingredient/{id} [put]
+// @Router /ingredient/${id} [put]
 func IngredientUpdate(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {

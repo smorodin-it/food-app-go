@@ -19,6 +19,15 @@ definitions:
       proteins:
         type: integer
     type: object
+  domains.Meal:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      totalWeight:
+        type: integer
+    type: object
   forms.FormAuth:
     properties:
       email:
@@ -41,6 +50,36 @@ definitions:
       name:
         type: string
       proteins:
+        type: integer
+    type: object
+  forms.MealForm:
+    properties:
+      name:
+        type: string
+      totalWeight:
+        type: integer
+    type: object
+  forms.MealIngredientAddForm:
+    properties:
+      ingredientId:
+        type: string
+      mealId:
+        type: string
+      totalWeight:
+        type: integer
+    type: object
+  forms.MealIngredientUpdateForm:
+    properties:
+      totalWeight:
+        type: integer
+    type: object
+  responses.MealIngredientResp:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      weight:
         type: integer
     type: object
   responses.ResponseAdd:
@@ -138,7 +177,7 @@ paths:
       summary: Create new ingredient
       tags:
       - Ingredient
-  /ingredient/{id}:
+  /ingredient/${id}:
     get:
       description: Retrieve ingredient by id
       parameters:
@@ -181,4 +220,194 @@ paths:
       summary: Update ingredient
       tags:
       - Ingredient
+  /meal:
+    get:
+      description: Get meals list by auth user id
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domains.Meal'
+            type: array
+      summary: Get meals list by auth user id
+      tags:
+      - Meal
+    post:
+      description: Create new meal
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forms.MealForm'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ResponseAdd'
+      summary: Create new meal
+      tags:
+      - Meal
+  /meal/${id}:
+    get:
+      description: Retrieve meal by id
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domains.Meal'
+      summary: Retrieve meal by id
+      tags:
+      - Meal
+    put:
+      description: Update meal
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forms.MealForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseStatus'
+      summary: Update meal
+      tags:
+      - Meal
+  /meal/${id}/ingredient:
+    get:
+      description: Get ingredients list in meal
+      parameters:
+      - description: meal id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.MealIngredientResp'
+            type: array
+      summary: Get ingredients list in meal
+      tags:
+      - Meal
+  /meal/all:
+    get:
+      description: Get meals list
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domains.Meal'
+            type: array
+      summary: Get meals list
+      tags:
+      - Meal
+  /meal/ingredient:
+    post:
+      description: Add ingredient to meal
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forms.MealIngredientAddForm'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ResponseAdd'
+      summary: Add ingredient to meal
+      tags:
+      - Meal
+  /meal/ingredient/${id}:
+    delete:
+      description: Delete ingredient from meal
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseStatus'
+      summary: Delete ingredient from meal
+      tags:
+      - Meal
+    put:
+      description: Update weight of ingredient in meal
+      parameters:
+      - description: ingredient in meal id
+        in: path
+        name: request
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forms.MealIngredientUpdateForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseAdd'
+      summary: Update weight of ingredient in meal
+      tags:
+      - Meal
 swagger: "2.0"
