@@ -27,14 +27,14 @@ func (r MeasurementRepository) ListByUserId(page int, perPage int, userId string
 	return measurements, nil
 }
 
-func (r MeasurementRepository) Create(measurement *domains.Measurement, userId string) (id *string, err error) {
+func (r MeasurementRepository) Create(measurement *domains.Measurement) (err error) {
 	sql := "INSERT INTO measurements (measurement_id, user_id, measurement_weight, date) VALUES ($1, $2, $3, $4)"
-	_, err = database.DBCon.Exec(sql, measurement.MeasurementId, userId, measurement.MeasurementWeight, measurement.Date)
+	_, err = database.DBCon.Exec(sql, measurement.MeasurementId, measurement.UserId, measurement.MeasurementWeight, measurement.Date)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &measurement.MeasurementId, nil
+	return nil
 }
 
 func (r MeasurementRepository) Update(measurement *domains.Measurement) error {
