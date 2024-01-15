@@ -37,6 +37,16 @@ func (r MeasurementRepository) Create(measurement *domains.Measurement) (err err
 	return nil
 }
 
+func (r MeasurementRepository) Retrieve(measurementId string) (measurement *domains.Measurement, err error) {
+	sql := "SELECT * from measurements WHERE measurement_id = $1"
+	err = database.DBCon.Get(measurement, sql, measurementId)
+	if err != nil {
+		return nil, err
+	}
+
+	return measurement, nil
+}
+
 func (r MeasurementRepository) Update(measurement *domains.Measurement) error {
 	sql := "UPDATE measurements SET measurement_weight = $1 WHERE measurement_id = $2"
 	_, err := database.DBCon.Exec(sql, measurement.MeasurementWeight, measurement.MeasurementId)

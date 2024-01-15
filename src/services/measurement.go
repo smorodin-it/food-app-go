@@ -36,6 +36,15 @@ func (s MeasurementService) Create(mf forms.MeasurementCreateForm) (id *string, 
 	return &m.MeasurementId, nil
 }
 
+func (s MeasurementService) Retrieve(measurementId string) (measurement *domains.Measurement, err error) {
+	measurement, err = s.r.Retrieve(measurementId)
+	if err != nil {
+		return nil, err
+	}
+
+	return measurement, nil
+}
+
 func (s MeasurementService) Update(mf forms.MeasurementUpdateForm, measurementId string) (err error) {
 	m := &domains.Measurement{
 		MeasurementId:     measurementId,

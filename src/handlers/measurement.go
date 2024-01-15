@@ -40,3 +40,33 @@ func MeasurementCreate(ctx *fiber.Ctx) error {
 
 	return utils.GetResponseAdd(ctx, *id)
 }
+
+func MeasurementRetrieve(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+
+	ms := new(services.MeasurementService)
+	measurement, err := ms.Retrieve(id)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(measurement)
+}
+
+func MeasurementUpdate(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	f := new(forms.MeasurementUpdateForm)
+	err := ctx.BodyParser(f)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+
+	}
+
+	ms := new(services.MeasurementService)
+	err = ms.Update(*f, id)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return utils.GetResponseStatus(ctx, true)
+}
