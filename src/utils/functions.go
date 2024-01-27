@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"food-backend/src/constants"
 	"food-backend/src/responses"
 	"github.com/gofiber/fiber/v2"
@@ -16,25 +17,20 @@ func GetAuthRefreshTokenDuration() time.Time {
 	return time.Now().Add(constants.AuthRefreshTokenDuration)
 }
 
-func SetTokensToCookies(ctx *fiber.Ctx, t responses.ResponseTokens) {
+func SetTokensToResponse(ctx *fiber.Ctx, tokens responses.ResponseTokens) {
+	// Set refresh token to server cookie
 	ctx.Cookie(&fiber.Cookie{
 		Name:     constants.AuthRefreshTokenField,
-		Value:    t.RefreshToken,
+		Value:    tokens.RefreshToken,
 		Path:     "/",
 		Domain:   ctx.Hostname(),
 		Expires:  GetAuthRefreshTokenDuration(),
 		HTTPOnly: true,
 		SameSite: "strict",
 	})
-	ctx.Cookie(&fiber.Cookie{
-		Name:     constants.AuthAccessTokenField,
-		Value:    t.Token,
-		Path:     "/",
-		Domain:   ctx.Hostname(),
-		Expires:  GetAuthTokenDuration(),
-		HTTPOnly: true,
-		SameSite: "strict",
-	})
+
+	// Set access token to Authorization header
+	ctx.Set("Authorization", fmt.Sprintf("Bearer %s", tokens.Token))
 }
 
 func CalcPagination(page int, perPage int) (limit int, offset int, withPagination bool) {
