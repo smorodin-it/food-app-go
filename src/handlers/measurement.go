@@ -70,3 +70,15 @@ func MeasurementUpdate(ctx *fiber.Ctx) error {
 
 	return utils.GetResponseStatus(ctx, true)
 }
+
+func MeasurementDelete(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+
+	ms := new(services.MeasurementService)
+	err := ms.Delete(id)
+	if err != nil {
+		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return utils.GetResponseStatus(ctx, true)
+}

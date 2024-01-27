@@ -58,4 +58,5 @@ func SetupRoutes(app *fiber.App) {
 	measurement.Post("/", handlers.MeasurementCreate)
 	measurement.Post("/:id", handlers.MeasurementRetrieve)
 	measurement.Put("/:id", handlers.MeasurementUpdate)
+	measurement.Delete("/:id", handlers.MeasurementDelete)
 }
