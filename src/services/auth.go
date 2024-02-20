@@ -14,11 +14,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthService struct {
-	ur repositories.UserRepository
+type AuthService interface {
+	GetUserIdFromToken(ctx *fiber.Ctx) (id interface{}, err error)
+	AuthUser(form forms.FormAuth) (tokens *responses.ResponseTokens, err error)
+	RefreshTokens(form forms.RefreshForm) (tokens *responses.ResponseTokens, err error)
 }
 
-func (s AuthService) generateTokens(user *domains.User) (*responses.ResponseTokens, error) {
+type authService struct {
+	r repositories.UserRepository
+}
+
+func (s authService) generateTokens(user *domains.User) (*responses.ResponseTokens, error) {
 	// Generate access token
 	token := jwt.New(jwt.SigningMethodHS512)
 
@@ -38,7 +44,7 @@ func (s AuthService) generateTokens(user *domains.User) (*responses.ResponseToke
 	return &responses.ResponseTokens{Token: at, RefreshToken: rt}, nil
 }
 
-func (s AuthService) GetUserIdFromToken(ctx *fiber.Ctx) (id interface{}, err error) {
+func (s authService) GetUserIdFromToken(ctx *fiber.Ctx) (id interface{}, err error) {
 	f := new(forms.AccessTokenForm)
 
 	err = ctx.CookieParser(f)
@@ -60,10 +66,10 @@ func (s AuthService) GetUserIdFromToken(ctx *fiber.Ctx) (id interface{}, err err
 	}
 }
 
-func (s AuthService) AuthUser(form forms.FormAuth) (tokens *responses.ResponseTokens, err error) {
+func (s authService) AuthUser(form forms.FormAuth) (tokens *responses.ResponseTokens, err error) {
 
 	//	Get user by email
-	user, err := s.ur.GetByEmail(form.Email)
+	user, err := s.r.GetByEmail(form.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +90,7 @@ func (s AuthService) AuthUser(form forms.FormAuth) (tokens *responses.ResponseTo
 		return nil, err
 	}
 
-	err = s.ur.SetRefreshToken(user.UserID, tokens.RefreshToken)
+	err = s.r.SetRefreshToken(user.UserID, tokens.RefreshToken)
 	if err != nil {
 		return nil, err
 	}
@@ -92,9 +98,9 @@ func (s AuthService) AuthUser(form forms.FormAuth) (tokens *responses.ResponseTo
 	return tokens, nil
 }
 
-func (s AuthService) RefreshTokens(form forms.RefreshForm) (tokens *responses.ResponseTokens, err error) {
+func (s authService) RefreshTokens(form forms.RefreshForm) (tokens *responses.ResponseTokens, err error) {
 	// Get user from db by refresh token
-	user, err := s.ur.GetByRefreshToken(form.RefreshToken)
+	user, err := s.r.GetByRefreshToken(form.RefreshToken)
 	if err != nil {
 		return nil, err
 	}
@@ -106,10 +112,16 @@ func (s AuthService) RefreshTokens(form forms.RefreshForm) (tokens *responses.Re
 	}
 
 	// Set new refresh token to user
-	err = s.ur.SetRefreshToken(user.UserID, tokens.RefreshToken)
+	err = s.r.SetRefreshToken(user.UserID, tokens.RefreshToken)
 	if err != nil {
 		return nil, err
 	}
 
 	return tokens, nil
+}
+
+func NewAuthService(repository repositories.UserRepository) AuthService {
+	return &authService{
+		r: repository,
+	}
 }

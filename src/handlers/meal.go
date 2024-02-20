@@ -75,7 +75,7 @@ func MealCreate(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	as := new(services.AuthService)
+	as := new(services.service)
 	userId, err := as.GetUserIdFromToken(ctx)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})

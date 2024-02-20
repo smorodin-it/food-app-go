@@ -1,28 +1,35 @@
 package repositories
 
 import (
-	"food-backend/src/database"
 	"food-backend/src/domains"
+	"github.com/jmoiron/sqlx"
 )
 
-type UserRepository struct{}
+type UserRepository interface {
+	GetByEmail(email string) (user *domains.User, err error)
+	SetRefreshToken(id string, refreshToken string) (err error)
+	GetByRefreshToken(token string) (user *domains.User, err error)
+}
 
-func (u UserRepository) GetByEmail(email string) (*domains.User, error) {
-	data := new(domains.User)
+type userRepository struct {
+	db *sqlx.DB
+}
+
+func (r userRepository) GetByEmail(email string) (user *domains.User, err error) {
+	user = new(domains.User)
+
 	sql := "SELECT * FROM users WHERE email = $1"
-
-	err := database.DBCon.Get(data, sql, email)
+	err = r.db.Get(user, sql, email)
 	if err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	return user, nil
 }
 
-func (u UserRepository) SetRefreshToken(id string, refreshToken string) error {
+func (r userRepository) SetRefreshToken(id string, refreshToken string) (err error) {
 	sql := "UPDATE users SET refresh_token = $1 WHERE user_id = $2"
-
-	_, err := database.DBCon.Exec(sql, refreshToken, id)
+	_, err = r.db.Exec(sql, refreshToken, id)
 	if err != nil {
 		return err
 	}
@@ -30,14 +37,18 @@ func (u UserRepository) SetRefreshToken(id string, refreshToken string) error {
 	return nil
 }
 
-func (u UserRepository) GetByRefreshToken(token string) (*domains.User, error) {
-	data := new(domains.User)
-	sql := "SELECT * from users WHERE refresh_token = $1"
+func (r userRepository) GetByRefreshToken(token string) (user *domains.User, err error) {
+	user = new(domains.User)
 
-	err := database.DBCon.Get(data, sql, token)
+	sql := "SELECT * from users WHERE refresh_token = $1"
+	err = r.db.Get(user, sql, token)
 	if err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	return user, nil
+}
+
+func NewUserRepository(db *sqlx.DB) UserRepository {
+	return &userRepository{db: db}
 }

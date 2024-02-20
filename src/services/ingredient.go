@@ -14,11 +14,11 @@ type IngredientService interface {
 	Update(form *forms.IngredientForm, id string) (err error)
 }
 
-type service struct {
+type ingredientService struct {
 	r repositories.IngredientRepository
 }
 
-func (s service) List(page int, perPage int) (ingredients []domains.Ingredient, err error) {
+func (s ingredientService) List(page int, perPage int) (ingredients []domains.Ingredient, err error) {
 	ingredients, err = s.r.List(page, perPage)
 	if err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func (s service) List(page int, perPage int) (ingredients []domains.Ingredient, 
 	return ingredients, nil
 }
 
-func (s service) Retrieve(id string) (ingredient *domains.Ingredient, err error) {
+func (s ingredientService) Retrieve(id string) (ingredient *domains.Ingredient, err error) {
 	ingredient, err = s.r.Retrieve(id)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (s service) Retrieve(id string) (ingredient *domains.Ingredient, err error)
 	return ingredient, nil
 }
 
-func (s service) Create(form *forms.IngredientForm, userId string) (id *string, err error) {
+func (s ingredientService) Create(form *forms.IngredientForm, userId string) (id *string, err error) {
 	model := domains.Ingredient{
 		IngredientID:   uuid.New().String(),
 		UserId:         userId,
@@ -57,7 +57,7 @@ func (s service) Create(form *forms.IngredientForm, userId string) (id *string, 
 	return id, nil
 }
 
-func (s service) Update(form *forms.IngredientForm, id string) (err error) {
+func (s ingredientService) Update(form *forms.IngredientForm, id string) (err error) {
 	model := domains.Ingredient{
 		IngredientID:   id,
 		IngredientName: form.Name,
@@ -78,5 +78,5 @@ func (s service) Update(form *forms.IngredientForm, id string) (err error) {
 }
 
 func NewIngredientService(repository repositories.IngredientRepository) IngredientService {
-	return &service{r: repository}
+	return &ingredientService{r: repository}
 }

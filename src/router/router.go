@@ -11,32 +11,37 @@ import (
 	"log"
 )
 
-func placeholderHandler(ctx *fiber.Ctx) error {
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"response": ctx.OriginalURL()})
-}
-
 func SetupRoutes(app *fiber.App) {
+	// Initialize database
+	db, err := database.Connect(database.DbConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Initialize repositories and services needed for public routes
+	userRepo := repositories.NewUserRepository(db)
+	authServ := services.NewAuthService(userRepo)
+
 	api := app.Group("/api")
 
 	// Auth
 	auth := api.Group("/auth")
-
-	auth.Post("/", handlers.AuthUser)
-	auth.Post("/refresh", handlers.RefreshTokens)
+	auth.Post("/", handlers.AuthUser(authServ))
+	auth.Post("/refresh", handlers.RefreshTokens(authServ))
 
 	api.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte(constants.AuthSignKey)},
 	},
 	))
 
-	// Initialize database, all services and repositories
-	db, err := database.Connect(database.DbConfig)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	// Initialize private repositories
 	ingredientRepo := repositories.NewIngredientRepo(db)
+
+	// Initialize private services
+	//userServ - TODO: Implement
 	ingredientServ := services.NewIngredientService(ingredientRepo)
+
+	// Private handlers
 
 	//	User
 	//user := api.Group("/user")
@@ -48,7 +53,7 @@ func SetupRoutes(app *fiber.App) {
 	// Ingredient
 	ingredient := api.Group("/ingredient")
 	ingredient.Get("/", handlers.IngredientList(ingredientServ))
-	ingredient.Post("/", handlers.IngredientCreate(ingredientServ))
+	ingredient.Post("/", handlers.IngredientCreate(ingredientServ, authServ))
 	ingredient.Get("/:id", handlers.IngredientRetrieve(ingredientServ))
 	ingredient.Put("/:id", handlers.IngredientUpdate(ingredientServ))
 

@@ -42,7 +42,7 @@ func IngredientList(is services.IngredientService) fiber.Handler {
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
 // @Router /ingredient [post]
-func IngredientCreate(is services.IngredientService) fiber.Handler {
+func IngredientCreate(is services.IngredientService, as services.AuthService) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		f := new(forms.IngredientForm)
 		err := ctx.BodyParser(f)
@@ -50,7 +50,6 @@ func IngredientCreate(is services.IngredientService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		as := new(services.AuthService)
 		userId, err := as.GetUserIdFromToken(ctx)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
