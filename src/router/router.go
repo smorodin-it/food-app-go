@@ -36,10 +36,12 @@ func SetupRoutes(app *fiber.App) {
 
 	// Initialize private repositories
 	ingredientRepo := repositories.NewIngredientRepo(db)
+	measurementRepo := repositories.NewMeasurementRepository(db)
 
 	// Initialize private services
 	//userServ - TODO: Implement
 	ingredientServ := services.NewIngredientService(ingredientRepo)
+	measurementServ := services.NewMeasurementService(measurementRepo)
 
 	// Private handlers
 
@@ -71,9 +73,9 @@ func SetupRoutes(app *fiber.App) {
 
 	//	Measurement
 	measurement := api.Group("/measurement")
-	measurement.Get("/", handlers.MeasurementListByUserId)
-	measurement.Post("/", handlers.MeasurementCreate)
-	measurement.Post("/:id", handlers.MeasurementRetrieve)
-	measurement.Put("/:id", handlers.MeasurementUpdate)
-	measurement.Delete("/:id", handlers.MeasurementDelete)
+	measurement.Get("/", handlers.MeasurementListByUserId(measurementServ))
+	measurement.Post("/", handlers.MeasurementCreate(measurementServ))
+	measurement.Post("/:id", handlers.MeasurementRetrieve(measurementServ))
+	measurement.Put("/:id", handlers.MeasurementUpdate(measurementServ))
+	measurement.Delete("/:id", handlers.MeasurementDelete(measurementServ))
 }
