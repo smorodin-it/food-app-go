@@ -2,28 +2,50 @@ package router
 
 import (
 	"food-backend/src/constants"
+	"food-backend/src/database"
 	"food-backend/src/handlers"
+	"food-backend/src/repositories"
+	"food-backend/src/services"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"log"
 )
 
-func placeholderHandler(ctx *fiber.Ctx) error {
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"response": ctx.OriginalURL()})
-}
-
 func SetupRoutes(app *fiber.App) {
+	// Initialize database
+	db, err := database.Connect(database.DbConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Initialize repositories and services needed for public routes
+	userRepo := repositories.NewUserRepository(db)
+	authServ := services.NewAuthService(userRepo)
+
 	api := app.Group("/api")
 
 	// Auth
 	auth := api.Group("/auth")
-
-	auth.Post("/", handlers.AuthUser)
-	auth.Post("/refresh", handlers.RefreshTokens)
+	auth.Post("/", handlers.AuthUser(authServ))
+	auth.Post("/refresh", handlers.RefreshTokens(authServ))
 
 	api.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte(constants.AuthSignKey)},
 	},
 	))
+
+	// Initialize private repositories
+	ingredientRepo := repositories.NewIngredientRepo(db)
+	mealRepo := repositories.NewMealRepository(db)
+	measurementRepo := repositories.NewMeasurementRepository(db)
+
+	// Initialize private services
+	//userServ - TODO: Implement
+	ingredientServ := services.NewIngredientService(ingredientRepo)
+	mealServ := services.NewMealService(mealRepo)
+	measurementServ := services.NewMeasurementService(measurementRepo)
+
+	// Private handlers
 
 	//	User
 	//user := api.Group("/user")
@@ -34,28 +56,28 @@ func SetupRoutes(app *fiber.App) {
 
 	// Ingredient
 	ingredient := api.Group("/ingredient")
-	ingredient.Get("/", handlers.IngredientList)
-	ingredient.Post("/", handlers.IngredientCreate)
-	ingredient.Get("/:id", handlers.IngredientRetrieve)
-	ingredient.Put("/:id", handlers.IngredientUpdate)
+	ingredient.Get("/", handlers.IngredientList(ingredientServ))
+	ingredient.Post("/", handlers.IngredientCreate(ingredientServ, authServ))
+	ingredient.Get("/:id", handlers.IngredientRetrieve(ingredientServ))
+	ingredient.Put("/:id", handlers.IngredientUpdate(ingredientServ))
 
 	// Meal
 	meal := api.Group("/meal")
-	meal.Get("/", handlers.MealListByUser)
-	meal.Get("/all", handlers.MealList)
-	meal.Post("/", handlers.MealCreate)
-	meal.Get("/:id", handlers.MealRetrieve)
-	meal.Put("/:id", handlers.MealUpdate)
-	meal.Get("/:id/ingredient", handlers.MealListIngredients)
-	meal.Post("/ingredient", handlers.MealAddIngredient)
-	meal.Put("/ingredient/:id", handlers.MealIngredientUpdate)
-	meal.Delete("/ingredient/:id", handlers.MealIngredientDelete)
+	meal.Get("/", handlers.MealListByUser(mealServ))
+	meal.Get("/all", handlers.MealList(mealServ))
+	meal.Post("/", handlers.MealCreate(mealServ, authServ))
+	meal.Get("/:id", handlers.MealRetrieve(mealServ))
+	meal.Put("/:id", handlers.MealUpdate(mealServ))
+	meal.Get("/:id/ingredient", handlers.MealListIngredients(mealServ))
+	meal.Post("/ingredient", handlers.MealAddIngredient(mealServ))
+	meal.Put("/ingredient/:id", handlers.MealIngredientUpdate(mealServ))
+	meal.Delete("/ingredient/:id", handlers.MealIngredientDelete(mealServ))
 
 	//	Measurement
 	measurement := api.Group("/measurement")
-	measurement.Get("/", handlers.MeasurementListByUserId)
-	measurement.Post("/", handlers.MeasurementCreate)
-	measurement.Post("/:id", handlers.MeasurementRetrieve)
-	measurement.Put("/:id", handlers.MeasurementUpdate)
-	measurement.Delete("/:id", handlers.MeasurementDelete)
+	measurement.Get("/", handlers.MeasurementListByUserId(measurementServ))
+	measurement.Post("/", handlers.MeasurementCreate(measurementServ))
+	measurement.Post("/:id", handlers.MeasurementRetrieve(measurementServ))
+	measurement.Put("/:id", handlers.MeasurementUpdate(measurementServ))
+	measurement.Delete("/:id", handlers.MeasurementDelete(measurementServ))
 }

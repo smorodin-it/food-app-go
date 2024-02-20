@@ -8,11 +8,19 @@ import (
 	"time"
 )
 
-type MeasurementService struct {
+type MeasurementService interface {
+	ListByUserId(page int, perPage int, userId string) (measurements []domains.Measurement, err error)
+	Create(mf forms.MeasurementCreateForm) (id *string, err error)
+	Retrieve(measurementId string) (measurement *domains.Measurement, err error)
+	Update(mf forms.MeasurementUpdateForm, measurementId string) (err error)
+	Delete(measurementId string) (err error)
+}
+
+type measurementService struct {
 	r repositories.MeasurementRepository
 }
 
-func (s MeasurementService) ListByUserId(page int, perPage int, userId string) (measurements []domains.Measurement, err error) {
+func (s measurementService) ListByUserId(page int, perPage int, userId string) (measurements []domains.Measurement, err error) {
 	measurements, err = s.r.ListByUserId(page, perPage, userId)
 	if err != nil {
 		return nil, err
@@ -21,7 +29,7 @@ func (s MeasurementService) ListByUserId(page int, perPage int, userId string) (
 	return measurements, nil
 }
 
-func (s MeasurementService) Create(mf forms.MeasurementCreateForm) (id *string, err error) {
+func (s measurementService) Create(mf forms.MeasurementCreateForm) (id *string, err error) {
 	m := &domains.Measurement{
 		MeasurementId:     uuid.New().String(),
 		UserId:            mf.UserId,
@@ -36,7 +44,7 @@ func (s MeasurementService) Create(mf forms.MeasurementCreateForm) (id *string, 
 	return &m.MeasurementId, nil
 }
 
-func (s MeasurementService) Retrieve(measurementId string) (measurement *domains.Measurement, err error) {
+func (s measurementService) Retrieve(measurementId string) (measurement *domains.Measurement, err error) {
 	measurement, err = s.r.Retrieve(measurementId)
 	if err != nil {
 		return nil, err
@@ -45,7 +53,7 @@ func (s MeasurementService) Retrieve(measurementId string) (measurement *domains
 	return measurement, nil
 }
 
-func (s MeasurementService) Update(mf forms.MeasurementUpdateForm, measurementId string) (err error) {
+func (s measurementService) Update(mf forms.MeasurementUpdateForm, measurementId string) (err error) {
 	m := &domains.Measurement{
 		MeasurementId:     measurementId,
 		MeasurementWeight: mf.MeasurementWeight,
@@ -58,11 +66,15 @@ func (s MeasurementService) Update(mf forms.MeasurementUpdateForm, measurementId
 	return nil
 }
 
-func (s MeasurementService) Delete(measurementId string) (err error) {
+func (s measurementService) Delete(measurementId string) (err error) {
 	err = s.r.Delete(measurementId)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func NewMeasurementService(repository repositories.MeasurementRepository) MeasurementService {
+	return &measurementService{r: repository}
 }

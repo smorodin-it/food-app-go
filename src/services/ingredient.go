@@ -7,11 +7,18 @@ import (
 	"github.com/google/uuid"
 )
 
-type IngredientService struct {
+type IngredientService interface {
+	List(page int, perPage int) (ingredients []domains.Ingredient, err error)
+	Retrieve(id string) (ingredient *domains.Ingredient, err error)
+	Create(form *forms.IngredientForm, userId string) (id *string, err error)
+	Update(form *forms.IngredientForm, id string) (err error)
+}
+
+type ingredientService struct {
 	r repositories.IngredientRepository
 }
 
-func (s IngredientService) List(page int, perPage int) (ingredients []domains.Ingredient, err error) {
+func (s ingredientService) List(page int, perPage int) (ingredients []domains.Ingredient, err error) {
 	ingredients, err = s.r.List(page, perPage)
 	if err != nil {
 		return nil, err
@@ -20,7 +27,7 @@ func (s IngredientService) List(page int, perPage int) (ingredients []domains.In
 	return ingredients, nil
 }
 
-func (s IngredientService) Retrieve(id string) (ingredient *domains.Ingredient, err error) {
+func (s ingredientService) Retrieve(id string) (ingredient *domains.Ingredient, err error) {
 	ingredient, err = s.r.Retrieve(id)
 	if err != nil {
 		return nil, err
@@ -29,7 +36,7 @@ func (s IngredientService) Retrieve(id string) (ingredient *domains.Ingredient, 
 	return ingredient, nil
 }
 
-func (s IngredientService) Create(form *forms.IngredientForm, userId string) (id *string, err error) {
+func (s ingredientService) Create(form *forms.IngredientForm, userId string) (id *string, err error) {
 	model := domains.Ingredient{
 		IngredientID:   uuid.New().String(),
 		UserId:         userId,
@@ -50,7 +57,7 @@ func (s IngredientService) Create(form *forms.IngredientForm, userId string) (id
 	return id, nil
 }
 
-func (s IngredientService) Update(form *forms.IngredientForm, id string) (err error) {
+func (s ingredientService) Update(form *forms.IngredientForm, id string) (err error) {
 	model := domains.Ingredient{
 		IngredientID:   id,
 		IngredientName: form.Name,
@@ -68,4 +75,8 @@ func (s IngredientService) Update(form *forms.IngredientForm, id string) (err er
 	}
 
 	return nil
+}
+
+func NewIngredientService(repository repositories.IngredientRepository) IngredientService {
+	return &ingredientService{r: repository}
 }

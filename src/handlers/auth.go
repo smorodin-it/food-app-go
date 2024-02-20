@@ -16,22 +16,23 @@ import (
 // @Produce plain
 // @Success 200
 // @Router /auth [post]
-func AuthUser(ctx *fiber.Ctx) error {
-	f := new(forms.FormAuth)
-	err := ctx.BodyParser(f)
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err})
+func AuthUser(as services.AuthService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		f := new(forms.FormAuth)
+		err := ctx.BodyParser(f)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
+
+		tokens, err := as.AuthUser(*f)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
+		}
+
+		utils.SetTokensToResponse(ctx, *tokens)
+
+		return ctx.SendStatus(fiber.StatusOK)
 	}
-
-	as := new(services.AuthService)
-	tokens, err := as.AuthUser(*f)
-	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err})
-	}
-
-	utils.SetTokensToResponse(ctx, *tokens)
-
-	return ctx.SendStatus(fiber.StatusOK)
 }
 
 // RefreshTokens is a function to refresh tokens
@@ -41,24 +42,26 @@ func AuthUser(ctx *fiber.Ctx) error {
 // @Produce plain
 // @Success 200
 // @Router /auth/refresh [post]
-func RefreshTokens(ctx *fiber.Ctx) error {
-	// Get refresh token from cookies
-	form := new(forms.RefreshForm)
+func RefreshTokens(as services.AuthService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		// Get refresh token from cookies
+		form := new(forms.RefreshForm)
 
-	err := ctx.CookieParser(form)
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		err := ctx.CookieParser(form)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
+
+		err = form.Validate()
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
+
+		tokens, err := as.RefreshTokens(*form)
+
+		utils.SetTokensToResponse(ctx, *tokens)
+
+		return ctx.SendStatus(fiber.StatusOK)
 	}
 
-	err = form.Validate()
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	as := new(services.AuthService)
-	tokens, err := as.RefreshTokens(*form)
-
-	utils.SetTokensToResponse(ctx, *tokens)
-
-	return ctx.SendStatus(fiber.StatusOK)
 }
