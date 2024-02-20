@@ -9,11 +9,27 @@ import (
 	"time"
 )
 
-type MealService struct {
+type MealService interface {
+	List(page int, perPage int) (meals []domains.Meal, err error)
+	ListByUser(userId string, page int, perPage int) (meals []domains.Meal, err error)
+	Create(f forms.MealForm, userId string) (id *string, err error)
+	Retrieve(id string) (meal *domains.Meal, err error)
+	Update(f forms.MealForm, id string) (err error)
+	AddIngredient(f forms.MealIngredientAddForm) (id *string, err error)
+	ListIngredients(mealId string) (ingredients *[]responses.MealIngredientResp, err error)
+	UpdateIngredient(id string, f forms.MealIngredientUpdateForm) (err error)
+	DeleteIngredient(id string) (err error)
+}
+
+type mealService struct {
 	r repositories.MealRepository
 }
 
-func (s MealService) List(page int, perPage int) (meals []domains.Meal, err error) {
+func NewMealService(repository repositories.MealRepository) MealService {
+	return &mealService{r: repository}
+}
+
+func (s mealService) List(page int, perPage int) (meals []domains.Meal, err error) {
 	meals, err = s.r.List(page, perPage)
 	if err != nil {
 		return nil, err
@@ -22,7 +38,7 @@ func (s MealService) List(page int, perPage int) (meals []domains.Meal, err erro
 	return meals, nil
 }
 
-func (s MealService) ListByUser(userId string, page int, perPage int) (meals []domains.Meal, err error) {
+func (s mealService) ListByUser(userId string, page int, perPage int) (meals []domains.Meal, err error) {
 	meals, err = s.r.ListByUser(userId, page, perPage)
 	if err != nil {
 		return nil, err
@@ -31,7 +47,7 @@ func (s MealService) ListByUser(userId string, page int, perPage int) (meals []d
 	return meals, nil
 }
 
-func (s MealService) Create(f forms.MealForm, userId string) (id *string, err error) {
+func (s mealService) Create(f forms.MealForm, userId string) (id *string, err error) {
 	m := domains.Meal{
 		MealID:      uuid.New().String(),
 		UserID:      userId,
@@ -47,7 +63,7 @@ func (s MealService) Create(f forms.MealForm, userId string) (id *string, err er
 	return id, nil
 }
 
-func (s MealService) Retrieve(id string) (meal *domains.Meal, err error) {
+func (s mealService) Retrieve(id string) (meal *domains.Meal, err error) {
 	meal, err = s.r.Retrieve(id)
 	if err != nil {
 		return nil, err
@@ -57,7 +73,7 @@ func (s MealService) Retrieve(id string) (meal *domains.Meal, err error) {
 
 }
 
-func (s MealService) Update(f forms.MealForm, id string) (err error) {
+func (s mealService) Update(f forms.MealForm, id string) (err error) {
 	m := domains.Meal{
 		MealName:    f.Name,
 		TotalWeight: f.TotalWeight,
@@ -72,7 +88,7 @@ func (s MealService) Update(f forms.MealForm, id string) (err error) {
 	return nil
 }
 
-func (s MealService) AddIngredient(f forms.MealIngredientAddForm) (id *string, err error) {
+func (s mealService) AddIngredient(f forms.MealIngredientAddForm) (id *string, err error) {
 	m := domains.MealsIngredientAdd{
 		ID:               uuid.New().String(),
 		MealId:           f.MealID,
@@ -88,7 +104,7 @@ func (s MealService) AddIngredient(f forms.MealIngredientAddForm) (id *string, e
 	return id, nil
 }
 
-func (s MealService) ListIngredients(mealId string) (ingredients *[]responses.MealIngredientResp, err error) {
+func (s mealService) ListIngredients(mealId string) (ingredients *[]responses.MealIngredientResp, err error) {
 	i, err := s.r.ListIngredients(mealId)
 	if err != nil {
 		return nil, err
@@ -97,13 +113,13 @@ func (s MealService) ListIngredients(mealId string) (ingredients *[]responses.Me
 	return i, nil
 }
 
-func (s MealService) UpdateIngredient(id string, f forms.MealIngredientUpdateForm) error {
+func (s mealService) UpdateIngredient(id string, f forms.MealIngredientUpdateForm) (err error) {
 	m := &domains.MealsIngredientUpdate{
 		ID:               id,
 		IngredientWeight: f.TotalWeight,
 	}
 
-	err := s.r.UpdateIngredient(*m)
+	err = s.r.UpdateIngredient(*m)
 	if err != nil {
 		return err
 	}
@@ -111,8 +127,8 @@ func (s MealService) UpdateIngredient(id string, f forms.MealIngredientUpdateFor
 	return nil
 }
 
-func (s MealService) DeleteIngredient(id string) error {
-	err := s.r.DeleteIngredient(id)
+func (s mealService) DeleteIngredient(id string) (err error) {
+	err = s.r.DeleteIngredient(id)
 	if err != nil {
 		return err
 	}

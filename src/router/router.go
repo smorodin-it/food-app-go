@@ -36,11 +36,13 @@ func SetupRoutes(app *fiber.App) {
 
 	// Initialize private repositories
 	ingredientRepo := repositories.NewIngredientRepo(db)
+	mealRepo := repositories.NewMealRepository(db)
 	measurementRepo := repositories.NewMeasurementRepository(db)
 
 	// Initialize private services
 	//userServ - TODO: Implement
 	ingredientServ := services.NewIngredientService(ingredientRepo)
+	mealServ := services.NewMealService(mealRepo)
 	measurementServ := services.NewMeasurementService(measurementRepo)
 
 	// Private handlers
@@ -61,15 +63,15 @@ func SetupRoutes(app *fiber.App) {
 
 	// Meal
 	meal := api.Group("/meal")
-	meal.Get("/", handlers.MealListByUser)
-	meal.Get("/all", handlers.MealList)
-	meal.Post("/", handlers.MealCreate)
-	meal.Get("/:id", handlers.MealRetrieve)
-	meal.Put("/:id", handlers.MealUpdate)
-	meal.Get("/:id/ingredient", handlers.MealListIngredients)
-	meal.Post("/ingredient", handlers.MealAddIngredient)
-	meal.Put("/ingredient/:id", handlers.MealIngredientUpdate)
-	meal.Delete("/ingredient/:id", handlers.MealIngredientDelete)
+	meal.Get("/", handlers.MealListByUser(mealServ))
+	meal.Get("/all", handlers.MealList(mealServ))
+	meal.Post("/", handlers.MealCreate(mealServ, authServ))
+	meal.Get("/:id", handlers.MealRetrieve(mealServ))
+	meal.Put("/:id", handlers.MealUpdate(mealServ))
+	meal.Get("/:id/ingredient", handlers.MealListIngredients(mealServ))
+	meal.Post("/ingredient", handlers.MealAddIngredient(mealServ))
+	meal.Put("/ingredient/:id", handlers.MealIngredientUpdate(mealServ))
+	meal.Delete("/ingredient/:id", handlers.MealIngredientDelete(mealServ))
 
 	//	Measurement
 	measurement := api.Group("/measurement")
