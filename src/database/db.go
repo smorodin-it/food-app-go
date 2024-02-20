@@ -16,18 +16,17 @@ var DbConfig = configType{
 	DbName:   "food-app",
 }
 
-var DBCon *sqlx.DB
-
-func ConnectToDB(config configType) {
-	db, err := sqlx.Connect(config.Driver,
+func Connect(config configType) (db *sqlx.DB, err error) {
+	db, err = sqlx.Connect(config.Driver,
 		"user="+config.User+
 			" password="+config.Password+
 			" dbname="+config.DbName+
 			" sslmode=disable")
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	DBCon = db
+	return db, nil
+
 }

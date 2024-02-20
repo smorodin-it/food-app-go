@@ -2,9 +2,13 @@ package router
 
 import (
 	"food-backend/src/constants"
+	"food-backend/src/database"
 	"food-backend/src/handlers"
+	"food-backend/src/repositories"
+	"food-backend/src/services"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"log"
 )
 
 func placeholderHandler(ctx *fiber.Ctx) error {
@@ -25,6 +29,15 @@ func SetupRoutes(app *fiber.App) {
 	},
 	))
 
+	// Initialize database, all services and repositories
+	db, err := database.Connect(database.DbConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ingredientRepo := repositories.NewIngredientRepo(db)
+	ingredientServ := services.NewIngredientService(ingredientRepo)
+
 	//	User
 	//user := api.Group("/user")
 	//user.Get("/", placeholderHandler)
@@ -34,10 +47,10 @@ func SetupRoutes(app *fiber.App) {
 
 	// Ingredient
 	ingredient := api.Group("/ingredient")
-	ingredient.Get("/", handlers.IngredientList)
-	ingredient.Post("/", handlers.IngredientCreate)
-	ingredient.Get("/:id", handlers.IngredientRetrieve)
-	ingredient.Put("/:id", handlers.IngredientUpdate)
+	ingredient.Get("/", handlers.IngredientList(ingredientServ))
+	ingredient.Post("/", handlers.IngredientCreate(ingredientServ))
+	ingredient.Get("/:id", handlers.IngredientRetrieve(ingredientServ))
+	ingredient.Put("/:id", handlers.IngredientUpdate(ingredientServ))
 
 	// Meal
 	meal := api.Group("/meal")

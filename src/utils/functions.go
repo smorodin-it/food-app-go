@@ -58,3 +58,7 @@ func GetResponseAdd(ctx *fiber.Ctx, id string) error {
 func GetResponseStatus(ctx *fiber.Ctx, status bool) error {
 	return ctx.Status(fiber.StatusCreated).JSON(responses.ResponseStatus{Status: status})
 }
+
+func GetResponseError(ctx *fiber.Ctx, status int, err error) error {
+	return ctx.Status(status).JSON(fiber.Map{"error": err.Error()})
+}

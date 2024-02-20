@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"food-backend/src/forms"
 	"food-backend/src/services"
 	"food-backend/src/utils"
@@ -15,26 +16,22 @@ import (
 // @Produce json
 // @Success 200 {object} []domains.Ingredient
 // @Router /ingredient [get]
-func IngredientList(ctx *fiber.Ctx) error {
-	q := new(forms.PaginationQuery)
+func IngredientList(is services.IngredientService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		q := new(forms.PaginationQuery)
 
-	err := ctx.QueryParser(q)
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		err := ctx.QueryParser(q)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
+		}
+
+		list, err := is.List(q.Page, q.PerPage)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
+
+		return ctx.Status(fiber.StatusOK).JSON(list)
 	}
-
-	is := new(services.IngredientService)
-
-	list, err := is.List(q.Page, q.PerPage)
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
-	}
-
-	return ctx.Status(fiber.StatusOK).JSON(list)
 }
 
 // IngredientCreate is a function to create new ingredient
@@ -45,26 +42,27 @@ func IngredientList(ctx *fiber.Ctx) error {
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
 // @Router /ingredient [post]
-func IngredientCreate(ctx *fiber.Ctx) error {
-	f := new(forms.IngredientForm)
-	err := ctx.BodyParser(f)
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
+func IngredientCreate(is services.IngredientService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		f := new(forms.IngredientForm)
+		err := ctx.BodyParser(f)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
 
-	as := new(services.AuthService)
-	userId, err := as.GetUserIdFromToken(ctx)
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
+		as := new(services.AuthService)
+		userId, err := as.GetUserIdFromToken(ctx)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
 
-	is := new(services.IngredientService)
-	id, err := is.Create(f, userId.(string))
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
+		id, err := is.Create(f, userId.(string))
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
 
-	return utils.GetResponseAdd(ctx, *id)
+		return utils.GetResponseAdd(ctx, *id)
+	}
 }
 
 // IngredientRetrieve is a function to get ingredient by id
@@ -75,22 +73,20 @@ func IngredientCreate(ctx *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} domains.Ingredient
 // @Router /ingredient/${id} [get]
-func IngredientRetrieve(ctx *fiber.Ctx) error {
-	id := ctx.Params("id")
-	if id == "" {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "bad id"})
+func IngredientRetrieve(is services.IngredientService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		id := ctx.Params("id")
+		if id == "" {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, errors.New("bad id"))
+		}
+
+		ingredient, err := is.Retrieve(id)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
+		}
+
+		return ctx.Status(fiber.StatusOK).JSON(ingredient)
 	}
-
-	is := new(services.IngredientService)
-
-	ingredient, err := is.Retrieve(id)
-	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
-	}
-
-	return ctx.Status(fiber.StatusOK).JSON(ingredient)
 }
 
 // IngredientUpdate is a function to update ingredient by id
@@ -102,26 +98,26 @@ func IngredientRetrieve(ctx *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
 // @Router /ingredient/${id} [put]
-func IngredientUpdate(ctx *fiber.Ctx) error {
-	id := ctx.Params("id")
-	if id == "" {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "bad id"})
+func IngredientUpdate(is services.IngredientService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		id := ctx.Params("id")
+		if id == "" {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, errors.New("bad id"))
+		}
+
+		f := new(forms.IngredientForm)
+
+		err := ctx.BodyParser(f)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
+
+		err = is.Update(f, id)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
+
+		}
+
+		return utils.GetResponseStatus(ctx, true)
 	}
-
-	f := new(forms.IngredientForm)
-
-	err := ctx.BodyParser(f)
-	if err != nil {
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	is := new(services.IngredientService)
-
-	err = is.Update(f, id)
-	if err != nil {
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-
-	}
-
-	return utils.GetResponseStatus(ctx, true)
 }
