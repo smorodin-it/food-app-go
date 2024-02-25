@@ -60,7 +60,7 @@ func TestRefreshTokensHandler(t *testing.T) {
 	}
 
 	// Without sleep, tokens are same
-	time.Sleep(time.Millisecond * 100)
+	time.Sleep(time.Millisecond * 500)
 
 	// Refresh tokens
 	req, _ := http.NewRequest("POST", "/api/auth/refresh", nil)
