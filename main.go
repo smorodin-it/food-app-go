@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "food-backend/docs"
-	"food-backend/src/router"
+	"food-backend/src/handlers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	_ "github.com/lib/pq"
@@ -18,7 +18,7 @@ func main() {
 
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
-	router.SetupRoutes(app)
+	handlers.SetupApp(app)
 
 	err := app.Listen(":3000")
 	if err != nil {
