@@ -6,11 +6,11 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type InventoryRepository interface {
+type InventoryRepo interface {
 	List(page int, perPage int) (inventories []domains.Inventory, err error)
 	Create(inventory *domains.Inventory, userId string) (id *string, err error)
 	Update(inventory *domains.Inventory) (err error)
-	Retrieve(id string) (inventory domains.Inventory, err error)
+	Retrieve(id string) (inventory *domains.Inventory, err error)
 }
 
 type inventoryRepo struct {
@@ -68,3 +68,5 @@ func (r *inventoryRepo) Retrieve(id string) (inventory *domains.Inventory, err e
 
 	return model, nil
 }
+
+func NewInventoryRepo(db *sqlx.DB) InventoryRepo { return &inventoryRepo{db: db} }
