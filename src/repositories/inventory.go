@@ -8,7 +8,7 @@ import (
 
 type InventoryRepo interface {
 	List(page int, perPage int) (inventories []domains.Inventory, err error)
-	Create(inventory *domains.Inventory, userId string) (id *string, err error)
+	Create(inventory *domains.Inventory) (id *string, err error)
 	Update(inventory *domains.Inventory) (err error)
 	Retrieve(id string) (inventory *domains.Inventory, err error)
 }
@@ -35,10 +35,10 @@ func (r *inventoryRepo) List(page int, perPage int) (inventories []domains.Inven
 	return inventories, nil
 }
 
-func (r *inventoryRepo) Create(inventory *domains.Inventory, userId string) (id *string, err error) {
+func (r *inventoryRepo) Create(inventory *domains.Inventory) (id *string, err error) {
 	sql := "INSERT INTO inventory(inventory_id, user_id, name, weight) VALUES ($1, $2, $3, $4)"
 
-	_, err = r.db.Exec(sql, inventory.InventoryID, userId, inventory.Name, inventory.Weight)
+	_, err = r.db.Exec(sql, inventory.InventoryID, inventory.UserID, inventory.Name, inventory.Weight)
 	if err != nil {
 		return nil, err
 	}
