@@ -22,7 +22,3 @@ func (f RefreshForm) Validate() error {
 
 	return nil
 }
-
-type AccessTokenForm struct {
-	Token string `json:"token"`
-}
