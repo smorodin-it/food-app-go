@@ -2,6 +2,7 @@ package services
 
 import (
 	"food-backend/src/domains"
+	"food-backend/src/forms"
 	"food-backend/src/repositories"
 	"github.com/google/uuid"
 )
@@ -9,8 +10,8 @@ import (
 type InventoryService interface {
 	List(page int, perPage int) (inventories []domains.Inventory, err error)
 	Retrieve(id string) (inventory *domains.Inventory, err error)
-	Create(form *domains.Inventory, userId string) (id *string, err error)
-	Update(form *domains.Inventory) (err error)
+	Create(form *forms.InventoryForm, userId string) (id *string, err error)
+	Update(form *forms.InventoryForm, id string) (err error)
 }
 
 type inventoryService struct {
@@ -35,7 +36,7 @@ func (s inventoryService) Retrieve(id string) (inventory *domains.Inventory, err
 	return inventory, nil
 }
 
-func (s inventoryService) Create(form *domains.Inventory, userId string) (id *string, err error) {
+func (s inventoryService) Create(form *forms.InventoryForm, userId string) (id *string, err error) {
 	model := domains.Inventory{
 		InventoryID: uuid.New().String(),
 		UserID:      userId,
@@ -51,9 +52,9 @@ func (s inventoryService) Create(form *domains.Inventory, userId string) (id *st
 	return id, nil
 }
 
-func (s inventoryService) Update(form *domains.Inventory) (err error) {
+func (s inventoryService) Update(form *forms.InventoryForm, id string) (err error) {
 	model := domains.Inventory{
-		InventoryID: form.InventoryID,
+		InventoryID: id,
 		UserID:      form.UserID,
 		Name:        form.Name,
 		Weight:      form.Weight,
