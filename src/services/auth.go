@@ -12,6 +12,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"strings"
 )
 
 type AuthService interface {
@@ -45,14 +46,13 @@ func (s authService) generateTokens(user *domains.User) (*responses.ResponseToke
 }
 
 func (s authService) GetUserIdFromToken(ctx *fiber.Ctx) (id interface{}, err error) {
-	f := new(forms.AccessTokenForm)
-
-	err = ctx.CookieParser(f)
-	if err != nil {
-		return nil, err
+	token := ctx.Get("Authorization", "")
+	token = strings.Split(token, "Bearer ")[1]
+	if token == "" {
+		return nil, errors.New("token is empty")
 	}
 
-	t, err := jwt.Parse(f.Token, func(token *jwt.Token) (interface{}, error) {
+	t, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(constants.AuthSignKey), nil
 	})
 	if err != nil {
@@ -76,10 +76,6 @@ func (s authService) AuthUser(form forms.FormAuth) (tokens *responses.ResponseTo
 
 	// Check user password
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(form.Password))
-	if err != nil {
-		return nil, err
-	}
-
 	if err != nil {
 		return nil, err
 	}
