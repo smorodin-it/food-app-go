@@ -55,7 +55,6 @@ func (s inventoryService) Create(form *forms.InventoryForm, userId string) (id *
 func (s inventoryService) Update(form *forms.InventoryForm, id string) (err error) {
 	model := domains.Inventory{
 		InventoryID: id,
-		UserID:      form.UserID,
 		Name:        form.Name,
 		Weight:      form.Weight,
 	}
