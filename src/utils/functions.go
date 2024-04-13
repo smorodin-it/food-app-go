@@ -56,7 +56,7 @@ func GetResponseAdd(ctx *fiber.Ctx, id string) error {
 }
 
 func GetResponseStatus(ctx *fiber.Ctx, status bool) error {
-	return ctx.Status(fiber.StatusCreated).JSON(responses.ResponseStatus{Status: status})
+	return ctx.Status(fiber.StatusOK).JSON(responses.ResponseStatus{Status: status})
 }
 
 func GetResponseError(ctx *fiber.Ctx, status int, err error) error {

@@ -6,6 +6,7 @@ import (
 	"food-backend/src/handlers"
 	"food-backend/src/repositories"
 	"food-backend/src/services"
+	"food-backend/src/utils"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 	"log"
@@ -31,6 +32,9 @@ func SetupRoutes(app *fiber.App) {
 
 	api.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte(constants.AuthSignKey)},
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			return utils.GetResponseError(ctx, fiber.StatusUnauthorized, err)
+		},
 	},
 	))
 
