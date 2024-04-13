@@ -58,6 +58,9 @@ func RefreshTokens(as services.AuthService) fiber.Handler {
 		}
 
 		tokens, err := as.RefreshTokens(*form)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
 
 		utils.SetTokensToResponse(ctx, *tokens)
 
