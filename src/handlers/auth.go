@@ -31,7 +31,7 @@ func AuthUser(as services.AuthService) fiber.Handler {
 
 		utils.SetTokensToResponse(ctx, *tokens)
 
-		return ctx.SendStatus(fiber.StatusOK)
+		return utils.GetResponseStatus(ctx, true)
 	}
 }
 
@@ -61,7 +61,7 @@ func RefreshTokens(as services.AuthService) fiber.Handler {
 
 		utils.SetTokensToResponse(ctx, *tokens)
 
-		return ctx.SendStatus(fiber.StatusOK)
+		return utils.GetResponseStatus(ctx, true)
 	}
 
 }
