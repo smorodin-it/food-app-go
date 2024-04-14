@@ -9,6 +9,7 @@ import (
 	"food-backend/src/utils"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"log"
 )
 
@@ -18,6 +19,8 @@ func SetupRoutes(app *fiber.App) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	app.Use(logger.New())
 
 	// Initialize repositories and services needed for public routes
 	userRepo := repositories.NewUserRepository(db)
