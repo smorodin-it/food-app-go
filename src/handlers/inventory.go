@@ -24,6 +24,7 @@ type inventoryHandler struct {
 // @Summary Get inventory list
 // @Description Get inventory list
 // @Tags Inventory
+// @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
 // @Success 200 {object} []domains.Inventory
@@ -49,6 +50,7 @@ func (h inventoryHandler) List() fiber.Handler {
 // @Summary Create new inventory
 // @Description Create new inventory
 // @Tags Inventory
+// @Security ApiKeyAuth
 // @Param request body forms.InventoryForm true "body"
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
@@ -79,6 +81,7 @@ func (h inventoryHandler) Create() fiber.Handler {
 // @Summary Retrieve inventory by id
 // @Description Retrieve inventory by id
 // @Tags Inventory
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
 // @Success 200 {object} domains.Inventory
@@ -103,6 +106,7 @@ func (h inventoryHandler) Retrieve() fiber.Handler {
 // @Summary Update inventory
 // @Description Update inventory
 // @Tags Inventory
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Param request body forms.InventoryForm true "body"
 // @Produce json

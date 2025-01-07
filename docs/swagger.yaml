@@ -183,6 +183,8 @@ paths:
             items:
               $ref: '#/definitions/domains.Ingredient'
             type: array
+      security:
+      - ApiKeyAuth: []
       summary: Get ingredients list
       tags:
       - Ingredient
@@ -202,6 +204,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/responses.ResponseAdd'
+      security:
+      - ApiKeyAuth: []
       summary: Create new ingredient
       tags:
       - Ingredient
@@ -221,6 +225,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domains.Ingredient'
+      security:
+      - ApiKeyAuth: []
       summary: Retrieve ingredient by id
       tags:
       - Ingredient
@@ -245,6 +251,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ResponseStatus'
+      security:
+      - ApiKeyAuth: []
       summary: Update ingredient
       tags:
       - Ingredient
@@ -267,6 +275,8 @@ paths:
             items:
               $ref: '#/definitions/domains.Inventory'
             type: array
+      security:
+      - ApiKeyAuth: []
       summary: Get inventory list
       tags:
       - Inventory
@@ -286,6 +296,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/responses.ResponseAdd'
+      security:
+      - ApiKeyAuth: []
       summary: Create new inventory
       tags:
       - Inventory
@@ -305,6 +317,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domains.Inventory'
+      security:
+      - ApiKeyAuth: []
       summary: Retrieve inventory by id
       tags:
       - Inventory
@@ -329,6 +343,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ResponseStatus'
+      security:
+      - ApiKeyAuth: []
       summary: Update inventory
       tags:
       - Inventory
@@ -351,6 +367,8 @@ paths:
             items:
               $ref: '#/definitions/domains.Meal'
             type: array
+      security:
+      - ApiKeyAuth: []
       summary: Get meals list by auth user id
       tags:
       - Meal
@@ -370,6 +388,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/responses.ResponseAdd'
+      security:
+      - ApiKeyAuth: []
       summary: Create new meal
       tags:
       - Meal
@@ -389,6 +409,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domains.Meal'
+      security:
+      - ApiKeyAuth: []
       summary: Retrieve meal by id
       tags:
       - Meal
@@ -413,6 +435,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ResponseStatus'
+      security:
+      - ApiKeyAuth: []
       summary: Update meal
       tags:
       - Meal
@@ -434,6 +458,8 @@ paths:
             items:
               $ref: '#/definitions/responses.MealIngredientResp'
             type: array
+      security:
+      - ApiKeyAuth: []
       summary: Get ingredients list in meal
       tags:
       - Meal
@@ -456,6 +482,8 @@ paths:
             items:
               $ref: '#/definitions/domains.Meal'
             type: array
+      security:
+      - ApiKeyAuth: []
       summary: Get meals list
       tags:
       - Meal
@@ -476,6 +504,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/responses.ResponseAdd'
+      security:
+      - ApiKeyAuth: []
       summary: Add ingredient to meal
       tags:
       - Meal
@@ -495,6 +525,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ResponseStatus'
+      security:
+      - ApiKeyAuth: []
       summary: Delete ingredient from meal
       tags:
       - Meal
@@ -519,6 +551,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ResponseAdd'
+      security:
+      - ApiKeyAuth: []
       summary: Update weight of ingredient in meal
       tags:
       - Meal
@@ -541,6 +575,8 @@ paths:
             items:
               $ref: '#/definitions/domains.Measurement'
             type: array
+      security:
+      - ApiKeyAuth: []
       summary: Get measurements list by user id
       tags:
       - Measurement
@@ -560,6 +596,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/responses.ResponseAdd'
+      security:
+      - ApiKeyAuth: []
       summary: Create new measurement
       tags:
       - Measurement
@@ -579,6 +617,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ResponseStatus'
+      security:
+      - ApiKeyAuth: []
       summary: Delete measurement
       tags:
       - Measurement
@@ -597,6 +637,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domains.Measurement'
+      security:
+      - ApiKeyAuth: []
       summary: Get measurement by id
       tags:
       - Measurement
@@ -621,7 +663,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/responses.ResponseStatus'
+      security:
+      - ApiKeyAuth: []
       summary: Update measurement
       tags:
       - Measurement
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

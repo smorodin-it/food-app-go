@@ -8,11 +8,14 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// @title food-app backend
-// @version 1.0
-// @description swagger for food-app api
-// @host 127.0.0.1:3000
+// @Title food-app backend
+// @Version 1.0
+// @Description swagger for food-app api
+// @Host 127.0.0.1:3000
 // @BasePath /api
+// @SecurityDefinitions.apikey ApiKeyAuth
+// @In header
+// @Name Authorization
 func main() {
 	app := fiber.New()
 

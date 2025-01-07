@@ -24,6 +24,7 @@ type ingredientHandler struct {
 // @Summary Get ingredients list
 // @Description Get ingredients list
 // @Tags Ingredient
+// @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
 // @Success 200 {object} []domains.Ingredient
@@ -50,6 +51,7 @@ func (h ingredientHandler) List() fiber.Handler {
 // @Summary Create new ingredient
 // @Description Create new ingredient
 // @Tags Ingredient
+// @Security ApiKeyAuth
 // @Param request body forms.IngredientForm true "body"
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
@@ -80,6 +82,7 @@ func (h ingredientHandler) Create() fiber.Handler {
 // @Summary Retrieve ingredient by id
 // @Description Retrieve ingredient by id
 // @Tags Ingredient
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
 // @Success 200 {object} domains.Ingredient
@@ -104,6 +107,7 @@ func (h ingredientHandler) Retrieve() fiber.Handler {
 // @Summary Update ingredient
 // @Description Update ingredient
 // @Tags Ingredient
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Param request body forms.IngredientForm true "body"
 // @Produce json

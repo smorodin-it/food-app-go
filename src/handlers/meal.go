@@ -29,6 +29,7 @@ type mealHandler struct {
 // @Summary Get meals list
 // @Description Get meals list
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
 // @Success 200 {object} []domains.Meal
@@ -55,6 +56,7 @@ func (h mealHandler) List() fiber.Handler {
 // @Summary Get meals list by auth user id
 // @Description Get meals list by auth user id
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
 // @Success 200 {object} []domains.Meal
@@ -83,6 +85,7 @@ func (h mealHandler) ListByUser() fiber.Handler {
 // @Summary Create new meal
 // @Description Create new meal
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request body forms.MealForm true "body"
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
@@ -115,6 +118,7 @@ func (h mealHandler) Create() fiber.Handler {
 // @Summary Retrieve meal by id
 // @Description Retrieve meal by id
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
 // @Success 200 {object} domains.Meal
@@ -139,6 +143,7 @@ func (h mealHandler) Retrieve() fiber.Handler {
 // @Summary Update meal
 // @Description Update meal
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Param request body forms.MealForm true "body"
 // @Produce json
@@ -170,6 +175,7 @@ func (h mealHandler) Update() fiber.Handler {
 // @Summary Add ingredient to meal
 // @Description Add ingredient to meal
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request body forms.MealIngredientAddForm true "body"
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
@@ -195,6 +201,7 @@ func (h mealHandler) AddIngredient() fiber.Handler {
 // @Summary Get ingredients list in meal
 // @Description Get ingredients list in meal
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request path string true "meal id"
 // @Produce json
 // @Success 200 {object} []responses.MealIngredientResp
@@ -219,6 +226,7 @@ func (h mealHandler) ListIngredient() fiber.Handler {
 // @Summary Update weight of ingredient in meal
 // @Description Update weight of ingredient in meal
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request path string true "ingredient in meal id"
 // @Param request body forms.MealIngredientUpdateForm true "body"
 // @Produce json
@@ -250,6 +258,7 @@ func (h mealHandler) UpdateIngredient() fiber.Handler {
 // @Summary Delete ingredient from meal
 // @Description Delete ingredient from meal
 // @Tags Meal
+// @Security ApiKeyAuth
 // @Param request path string true "ingredient in meal id"
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus

@@ -65,6 +65,11 @@ const docTemplate = `{
         },
         "/ingredient": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get ingredients list",
                 "produces": [
                     "application/json"
@@ -98,6 +103,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create new ingredient",
                 "produces": [
                     "application/json"
@@ -129,6 +139,11 @@ const docTemplate = `{
         },
         "/ingredient/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve ingredient by id",
                 "produces": [
                     "application/json"
@@ -156,6 +171,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update ingredient",
                 "produces": [
                     "application/json"
@@ -194,6 +214,11 @@ const docTemplate = `{
         },
         "/inventory": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get inventory list",
                 "produces": [
                     "application/json"
@@ -227,6 +252,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create new inventory",
                 "produces": [
                     "application/json"
@@ -258,6 +288,11 @@ const docTemplate = `{
         },
         "/inventory/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve inventory by id",
                 "produces": [
                     "application/json"
@@ -285,6 +320,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update inventory",
                 "produces": [
                     "application/json"
@@ -323,6 +363,11 @@ const docTemplate = `{
         },
         "/meal": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get meals list by auth user id",
                 "produces": [
                     "application/json"
@@ -356,6 +401,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create new meal",
                 "produces": [
                     "application/json"
@@ -387,6 +437,11 @@ const docTemplate = `{
         },
         "/meal/all": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get meals list",
                 "produces": [
                     "application/json"
@@ -422,6 +477,11 @@ const docTemplate = `{
         },
         "/meal/ingredient": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Add ingredient to meal",
                 "produces": [
                     "application/json"
@@ -453,6 +513,11 @@ const docTemplate = `{
         },
         "/meal/ingredient/{id}": {
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update weight of ingredient in meal",
                 "produces": [
                     "application/json"
@@ -489,6 +554,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete ingredient from meal",
                 "produces": [
                     "application/json"
@@ -518,6 +588,11 @@ const docTemplate = `{
         },
         "/meal/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve meal by id",
                 "produces": [
                     "application/json"
@@ -545,6 +620,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update meal",
                 "produces": [
                     "application/json"
@@ -583,6 +663,11 @@ const docTemplate = `{
         },
         "/meal/{id}/ingredient": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get ingredients list in meal",
                 "produces": [
                     "application/json"
@@ -615,6 +700,11 @@ const docTemplate = `{
         },
         "/measurement": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get measurements list by user id",
                 "produces": [
                     "application/json"
@@ -648,6 +738,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create new measurement",
                 "produces": [
                     "application/json"
@@ -680,6 +775,11 @@ const docTemplate = `{
         },
         "/measurement/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get measurement by id",
                 "produces": [
                     "application/json"
@@ -707,6 +807,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update measurement",
                 "produces": [
                     "application/json"
@@ -743,6 +848,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete measurement",
                 "produces": [
                     "application/json"
@@ -967,6 +1077,13 @@ const docTemplate = `{
                     "type": "boolean"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

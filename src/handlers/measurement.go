@@ -24,6 +24,7 @@ type measurementHandler struct {
 // @Summary Get measurements list by user id
 // @Description Get measurements list by user id
 // @Tags Measurement
+// @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
 // @Success 200 {object} []domains.Measurement
@@ -54,6 +55,7 @@ func (h measurementHandler) ListByUserId() fiber.Handler {
 // @Summary Create new measurement
 // @Description Create new measurement
 // @Tags Measurement
+// @Security ApiKeyAuth
 // @Param request query forms.MeasurementCreateForm true "body"
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
@@ -79,6 +81,7 @@ func (h measurementHandler) Create() fiber.Handler {
 // @Summary Get measurement by id
 // @Description Get measurement by id
 // @Tags Measurement
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
 // @Success 200 {object} domains.Measurement
@@ -100,6 +103,7 @@ func (h measurementHandler) Retrieve() fiber.Handler {
 // @Summary Update measurement
 // @Description Update measurement
 // @Tags Measurement
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Param request body forms.MeasurementUpdateForm true "body"
 // @Produce json
@@ -127,6 +131,7 @@ func (h measurementHandler) Update() fiber.Handler {
 // @Summary Delete measurement
 // @Description Delete measurement
 // @Tags Measurement
+// @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
