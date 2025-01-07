@@ -192,6 +192,135 @@ const docTemplate = `{
                 }
             }
         },
+        "/inventory": {
+            "get": {
+                "description": "Get inventory list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get inventory list",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "perPage",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domains.Inventory"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new inventory",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Create new inventory",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/forms.InventoryForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseAdd"
+                        }
+                    }
+                }
+            }
+        },
+        "/inventory/{id}": {
+            "get": {
+                "description": "Retrieve inventory by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Retrieve inventory by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.Inventory"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update inventory",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Update inventory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/forms.InventoryForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseStatus"
+                        }
+                    }
+                }
+            }
+        },
         "/meal": {
             "get": {
                 "description": "Get meals list by auth user id",
@@ -672,6 +801,23 @@ const docTemplate = `{
                 }
             }
         },
+        "domains.Inventory": {
+            "type": "object",
+            "properties": {
+                "inventoryId": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "integer"
+                }
+            }
+        },
         "domains.Meal": {
             "type": "object",
             "properties": {
@@ -736,6 +882,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "proteins": {
+                    "type": "integer"
+                }
+            }
+        },
+        "forms.InventoryForm": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "weight": {
                     "type": "integer"
                 }
             }

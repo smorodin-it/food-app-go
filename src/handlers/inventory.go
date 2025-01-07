@@ -20,6 +20,14 @@ type inventoryHandler struct {
 	is services.InventoryService
 }
 
+// List is a function to get list of all inventory
+// @Summary Get inventory list
+// @Description Get inventory list
+// @Tags Inventory
+// @Param request query forms.PaginationQuery true "pagination"
+// @Produce json
+// @Success 200 {object} []domains.Inventory
+// @Router /inventory [get]
 func (h inventoryHandler) List() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		q := new(forms.PaginationQuery)
@@ -37,6 +45,14 @@ func (h inventoryHandler) List() fiber.Handler {
 	}
 }
 
+// Create is a function to create new inventory
+// @Summary Create new inventory
+// @Description Create new inventory
+// @Tags Inventory
+// @Param request body forms.InventoryForm true "body"
+// @Produce json
+// @Success 201 {object} responses.ResponseAdd
+// @Router /inventory [post]
 func (h inventoryHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		f := new(forms.InventoryForm)
@@ -59,6 +75,14 @@ func (h inventoryHandler) Create() fiber.Handler {
 	}
 }
 
+// Retrieve is a function to get inventory by id
+// @Summary Retrieve inventory by id
+// @Description Retrieve inventory by id
+// @Tags Inventory
+// @Param request path string true "id"
+// @Produce json
+// @Success 200 {object} domains.Inventory
+// @Router /inventory/{id} [get]
 func (h inventoryHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
@@ -75,6 +99,15 @@ func (h inventoryHandler) Retrieve() fiber.Handler {
 	}
 }
 
+// Update is a function to update inventory by id
+// @Summary Update inventory
+// @Description Update inventory
+// @Tags Inventory
+// @Param request path string true "id"
+// @Param request body forms.InventoryForm true "body"
+// @Produce json
+// @Success 200 {object} responses.ResponseStatus
+// @Router /inventory/{id} [put]
 func (h inventoryHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
