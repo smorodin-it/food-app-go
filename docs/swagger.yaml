@@ -28,6 +28,17 @@ definitions:
       totalWeight:
         type: integer
     type: object
+  domains.Measurement:
+    properties:
+      date:
+        type: string
+      measurementId:
+        type: string
+      measurementWeight:
+        type: integer
+      userId:
+        type: string
+    type: object
   forms.FormAuth:
     properties:
       email:
@@ -73,6 +84,11 @@ definitions:
       totalWeight:
         type: integer
     type: object
+  forms.MeasurementUpdateForm:
+    properties:
+      measurementWeight:
+        type: integer
+    type: object
   responses.MealIngredientResp:
     properties:
       id:
@@ -94,15 +110,9 @@ definitions:
     type: object
 host: 127.0.0.1:3000
 info:
-  contact:
-    email: fiber@swagger.io
-    name: API Support
-  description: This is a sample swagger for Fiber
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: Fiber Example API
+  contact: {}
+  description: swagger for food-app api
+  title: food-app backend
   version: "1.0"
 paths:
   /auth:
@@ -177,7 +187,7 @@ paths:
       summary: Create new ingredient
       tags:
       - Ingredient
-  /ingredient/${id}:
+  /ingredient/{id}:
     get:
       description: Retrieve ingredient by id
       parameters:
@@ -261,7 +271,7 @@ paths:
       summary: Create new meal
       tags:
       - Meal
-  /meal/${id}:
+  /meal/{id}:
     get:
       description: Retrieve meal by id
       parameters:
@@ -304,7 +314,7 @@ paths:
       summary: Update meal
       tags:
       - Meal
-  /meal/${id}/ingredient:
+  /meal/{id}/ingredient:
     get:
       description: Get ingredients list in meal
       parameters:
@@ -367,11 +377,11 @@ paths:
       summary: Add ingredient to meal
       tags:
       - Meal
-  /meal/ingredient/${id}:
+  /meal/ingredient/{id}:
     delete:
       description: Delete ingredient from meal
       parameters:
-      - description: id
+      - description: ingredient in meal id
         in: path
         name: request
         required: true
@@ -410,4 +420,106 @@ paths:
       summary: Update weight of ingredient in meal
       tags:
       - Meal
+  /measurement:
+    get:
+      description: Get measurements list by user id
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domains.Measurement'
+            type: array
+      summary: Get measurements list by user id
+      tags:
+      - Measurement
+    post:
+      description: Create new measurement
+      parameters:
+      - in: query
+        name: measurementWeight
+        type: integer
+      - in: query
+        name: userId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ResponseAdd'
+      summary: Create new measurement
+      tags:
+      - Measurement
+  /measurement/{id}:
+    delete:
+      description: Delete measurement
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseStatus'
+      summary: Delete measurement
+      tags:
+      - Measurement
+    get:
+      description: Get measurement by id
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domains.Measurement'
+      summary: Get measurement by id
+      tags:
+      - Measurement
+    put:
+      description: Update measurement
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forms.MeasurementUpdateForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseStatus'
+      summary: Update measurement
+      tags:
+      - Measurement
 swagger: "2.0"

@@ -118,7 +118,7 @@ func (h mealHandler) Create() fiber.Handler {
 // @Param request path string true "id"
 // @Produce json
 // @Success 200 {object} domains.Meal
-// @Router /meal/${id} [get]
+// @Router /meal/{id} [get]
 func (h mealHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
@@ -143,7 +143,7 @@ func (h mealHandler) Retrieve() fiber.Handler {
 // @Param request body forms.MealForm true "body"
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
-// @Router /meal/${id} [put]
+// @Router /meal/{id} [put]
 func (h mealHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
@@ -198,7 +198,7 @@ func (h mealHandler) AddIngredient() fiber.Handler {
 // @Param request path string true "meal id"
 // @Produce json
 // @Success 200 {object} []responses.MealIngredientResp
-// @Router /meal/${id}/ingredient [get]
+// @Router /meal/{id}/ingredient [get]
 func (h mealHandler) ListIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
@@ -223,7 +223,7 @@ func (h mealHandler) ListIngredient() fiber.Handler {
 // @Param request body forms.MealIngredientUpdateForm true "body"
 // @Produce json
 // @Success 200 {object} responses.ResponseAdd
-// @Router /meal/ingredient/${id} [put]
+// @Router /meal/ingredient/{id} [put]
 func (h mealHandler) UpdateIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
@@ -253,7 +253,7 @@ func (h mealHandler) UpdateIngredient() fiber.Handler {
 // @Param request path string true "ingredient in meal id"
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
-// @Router /meal/ingredient/${id} [delete]
+// @Router /meal/ingredient/{id} [delete]
 func (h mealHandler) DeleteIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")

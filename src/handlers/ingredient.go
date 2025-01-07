@@ -83,7 +83,7 @@ func (h ingredientHandler) Create() fiber.Handler {
 // @Param request path string true "id"
 // @Produce json
 // @Success 200 {object} domains.Ingredient
-// @Router /ingredient/${id} [get]
+// @Router /ingredient/{id} [get]
 func (h ingredientHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
@@ -108,7 +108,7 @@ func (h ingredientHandler) Retrieve() fiber.Handler {
 // @Param request body forms.IngredientForm true "body"
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
-// @Router /ingredient/${id} [put]
+// @Router /ingredient/{id} [put]
 func (h ingredientHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")

@@ -20,6 +20,14 @@ type measurementHandler struct {
 	ms services.MeasurementService
 }
 
+// ListByUserId is a function to get list of all user measurements
+// @Summary Get measurements list by user id
+// @Description Get measurements list by user id
+// @Tags Measurement
+// @Param request query forms.PaginationQuery true "pagination"
+// @Produce json
+// @Success 200 {object} []domains.Measurement
+// @Router /measurement [get]
 func (h measurementHandler) ListByUserId() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		userId, err := h.as.GetUserIdFromToken(ctx)
@@ -42,6 +50,14 @@ func (h measurementHandler) ListByUserId() fiber.Handler {
 	}
 }
 
+// Create is a function to create new measurement
+// @Summary Create new measurement
+// @Description Create new measurement
+// @Tags Measurement
+// @Param request query forms.MeasurementCreateForm true "body"
+// @Produce json
+// @Success 201 {object} responses.ResponseAdd
+// @Router /measurement [post]
 func (h measurementHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		f := new(forms.MeasurementCreateForm)
@@ -59,6 +75,14 @@ func (h measurementHandler) Create() fiber.Handler {
 	}
 }
 
+// Retrieve is a function to get measurement by id
+// @Summary Get measurement by id
+// @Description Get measurement by id
+// @Tags Measurement
+// @Param request path string true "id"
+// @Produce json
+// @Success 200 {object} domains.Measurement
+// @Router /measurement/{id} [get]
 func (h measurementHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
@@ -72,6 +96,15 @@ func (h measurementHandler) Retrieve() fiber.Handler {
 	}
 }
 
+// Update is a function to update measurement by id
+// @Summary Update measurement
+// @Description Update measurement
+// @Tags Measurement
+// @Param request path string true "id"
+// @Param request body forms.MeasurementUpdateForm true "body"
+// @Produce json
+// @Success 200 {object} responses.ResponseStatus
+// @Router /measurement/{id} [put]
 func (h measurementHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
@@ -90,6 +123,14 @@ func (h measurementHandler) Update() fiber.Handler {
 	}
 }
 
+// Delete is a function to delete measurement by id
+// @Summary Delete measurement
+// @Description Delete measurement
+// @Tags Measurement
+// @Param request path string true "id"
+// @Produce json
+// @Success 200 {object} responses.ResponseStatus
+// @Router /measurement/{id} [delete]
 func (h measurementHandler) Delete() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")

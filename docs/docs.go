@@ -9,15 +9,7 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "email": "fiber@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -135,7 +127,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ingredient/${id}": {
+        "/ingredient/{id}": {
             "get": {
                 "description": "Retrieve ingredient by id",
                 "produces": [
@@ -264,103 +256,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/meal/${id}": {
-            "get": {
-                "description": "Retrieve meal by id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Meal"
-                ],
-                "summary": "Retrieve meal by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "request",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/domains.Meal"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update meal",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Meal"
-                ],
-                "summary": "Update meal",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "id",
-                        "name": "request",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "body",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/forms.MealForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/responses.ResponseStatus"
-                        }
-                    }
-                }
-            }
-        },
-        "/meal/${id}/ingredient": {
-            "get": {
-                "description": "Get ingredients list in meal",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Meal"
-                ],
-                "summary": "Get ingredients list in meal",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "meal id",
-                        "name": "request",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/responses.MealIngredientResp"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/meal/all": {
             "get": {
                 "description": "Get meals list",
@@ -427,7 +322,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/meal/ingredient/${id}": {
+        "/meal/ingredient/{id}": {
             "put": {
                 "description": "Update weight of ingredient in meal",
                 "produces": [
@@ -473,6 +368,260 @@ const docTemplate = `{
                     "Meal"
                 ],
                 "summary": "Delete ingredient from meal",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ingredient in meal id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseStatus"
+                        }
+                    }
+                }
+            }
+        },
+        "/meal/{id}": {
+            "get": {
+                "description": "Retrieve meal by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Meal"
+                ],
+                "summary": "Retrieve meal by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.Meal"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update meal",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Meal"
+                ],
+                "summary": "Update meal",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/forms.MealForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseStatus"
+                        }
+                    }
+                }
+            }
+        },
+        "/meal/{id}/ingredient": {
+            "get": {
+                "description": "Get ingredients list in meal",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Meal"
+                ],
+                "summary": "Get ingredients list in meal",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "meal id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/responses.MealIngredientResp"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/measurement": {
+            "get": {
+                "description": "Get measurements list by user id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Get measurements list by user id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "perPage",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domains.Measurement"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new measurement",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Create new measurement",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "measurementWeight",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "userId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseAdd"
+                        }
+                    }
+                }
+            }
+        },
+        "/measurement/{id}": {
+            "get": {
+                "description": "Get measurement by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Get measurement by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domains.Measurement"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update measurement",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Update measurement",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id",
+                        "name": "request",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/forms.MeasurementUpdateForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseStatus"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete measurement",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Delete measurement",
                 "parameters": [
                     {
                         "type": "string",
@@ -534,6 +683,23 @@ const docTemplate = `{
                 },
                 "totalWeight": {
                     "type": "integer"
+                }
+            }
+        },
+        "domains.Measurement": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "measurementId": {
+                    "type": "string"
+                },
+                "measurementWeight": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "string"
                 }
             }
         },
@@ -607,6 +773,14 @@ const docTemplate = `{
                 }
             }
         },
+        "forms.MeasurementUpdateForm": {
+            "type": "object",
+            "properties": {
+                "measurementWeight": {
+                    "type": "integer"
+                }
+            }
+        },
         "responses.MealIngredientResp": {
             "type": "object",
             "properties": {
@@ -646,8 +820,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "127.0.0.1:3000",
 	BasePath:         "/api",
 	Schemes:          []string{},
-	Title:            "Fiber Example API",
-	Description:      "This is a sample swagger for Fiber",
+	Title:            "food-app backend",
+	Description:      "swagger for food-app api",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
