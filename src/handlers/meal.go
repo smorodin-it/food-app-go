@@ -8,7 +8,24 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// MealList is a function to get list of all meals
+type MealHandler interface {
+	List() fiber.Handler
+	ListByUser() fiber.Handler
+	Create() fiber.Handler
+	Retrieve() fiber.Handler
+	Update() fiber.Handler
+	AddIngredient() fiber.Handler
+	ListIngredient() fiber.Handler
+	UpdateIngredient() fiber.Handler
+	DeleteIngredient() fiber.Handler
+}
+
+type mealHandler struct {
+	ms services.MealService
+	as services.AuthService
+}
+
+// List is a function to get list of all meals
 // @Summary Get meals list
 // @Description Get meals list
 // @Tags Meal
@@ -16,7 +33,7 @@ import (
 // @Produce json
 // @Success 200 {object} []domains.Meal
 // @Router /meal/all [get]
-func MealList(ms services.MealService) fiber.Handler {
+func (h mealHandler) List() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		q := new(forms.PaginationQuery)
 
@@ -25,7 +42,7 @@ func MealList(ms services.MealService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		meals, err := ms.List(q.Page, q.PerPage)
+		meals, err := h.ms.List(q.Page, q.PerPage)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -34,7 +51,7 @@ func MealList(ms services.MealService) fiber.Handler {
 	}
 }
 
-// MealListByUser is a function to get list of all meals by auth user id
+// ListByUser is a function to get list of all meals by auth user id
 // @Summary Get meals list by auth user id
 // @Description Get meals list by auth user id
 // @Tags Meal
@@ -42,7 +59,7 @@ func MealList(ms services.MealService) fiber.Handler {
 // @Produce json
 // @Success 200 {object} []domains.Meal
 // @Router /meal [get]
-func MealListByUser(ms services.MealService) fiber.Handler {
+func (h mealHandler) ListByUser() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		userId := utils.GetUserIDFromToken(ctx)
 
@@ -53,7 +70,7 @@ func MealListByUser(ms services.MealService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		meals, err := ms.ListByUser(userId, q.Page, q.PerPage)
+		meals, err := h.ms.ListByUser(userId, q.Page, q.PerPage)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -62,7 +79,7 @@ func MealListByUser(ms services.MealService) fiber.Handler {
 	}
 }
 
-// MealCreate is a function to create new meal
+// Create is a function to create new meal
 // @Summary Create new meal
 // @Description Create new meal
 // @Tags Meal
@@ -70,7 +87,7 @@ func MealListByUser(ms services.MealService) fiber.Handler {
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
 // @Router /meal [post]
-func MealCreate(ms services.MealService, as services.AuthService) fiber.Handler {
+func (h mealHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		f := new(forms.MealForm)
 
@@ -79,12 +96,12 @@ func MealCreate(ms services.MealService, as services.AuthService) fiber.Handler 
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		userId, err := as.GetUserIdFromToken(ctx)
+		userId, err := h.as.GetUserIdFromToken(ctx)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		id, err := ms.Create(*f, userId.(string))
+		id, err := h.ms.Create(*f, userId.(string))
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 
@@ -94,7 +111,7 @@ func MealCreate(ms services.MealService, as services.AuthService) fiber.Handler 
 	}
 }
 
-// MealRetrieve is a function to get meal by id
+// Retrieve is a function to get meal by id
 // @Summary Retrieve meal by id
 // @Description Retrieve meal by id
 // @Tags Meal
@@ -102,14 +119,14 @@ func MealCreate(ms services.MealService, as services.AuthService) fiber.Handler 
 // @Produce json
 // @Success 200 {object} domains.Meal
 // @Router /meal/${id} [get]
-func MealRetrieve(ms services.MealService) fiber.Handler {
+func (h mealHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 		if id == "" {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, errors.New("bad id"))
 		}
 
-		meal, err := ms.Retrieve(id)
+		meal, err := h.ms.Retrieve(id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -118,7 +135,7 @@ func MealRetrieve(ms services.MealService) fiber.Handler {
 	}
 }
 
-// MealUpdate is a function to update meal by id
+// Update is a function to update meal by id
 // @Summary Update meal
 // @Description Update meal
 // @Tags Meal
@@ -127,7 +144,7 @@ func MealRetrieve(ms services.MealService) fiber.Handler {
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
 // @Router /meal/${id} [put]
-func MealUpdate(ms services.MealService) fiber.Handler {
+func (h mealHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 		if id == "" {
@@ -140,7 +157,7 @@ func MealUpdate(ms services.MealService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		err = ms.Update(*f, id)
+		err = h.ms.Update(*f, id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -149,7 +166,7 @@ func MealUpdate(ms services.MealService) fiber.Handler {
 	}
 }
 
-// MealAddIngredient is a function to add ingredient to meal
+// AddIngredient is a function to add ingredient to meal
 // @Summary Add ingredient to meal
 // @Description Add ingredient to meal
 // @Tags Meal
@@ -157,7 +174,7 @@ func MealUpdate(ms services.MealService) fiber.Handler {
 // @Produce json
 // @Success 201 {object} responses.ResponseAdd
 // @Router /meal/ingredient [post]
-func MealAddIngredient(ms services.MealService) fiber.Handler {
+func (h mealHandler) AddIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		f := new(forms.MealIngredientAddForm)
 		err := ctx.BodyParser(f)
@@ -165,7 +182,7 @@ func MealAddIngredient(ms services.MealService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		id, err := ms.AddIngredient(*f)
+		id, err := h.ms.AddIngredient(*f)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -174,7 +191,7 @@ func MealAddIngredient(ms services.MealService) fiber.Handler {
 	}
 }
 
-// MealListIngredients is a function to get list of all ingredients in meal
+// ListIngredient is a function to get list of all ingredients in meal
 // @Summary Get ingredients list in meal
 // @Description Get ingredients list in meal
 // @Tags Meal
@@ -182,14 +199,14 @@ func MealAddIngredient(ms services.MealService) fiber.Handler {
 // @Produce json
 // @Success 200 {object} []responses.MealIngredientResp
 // @Router /meal/${id}/ingredient [get]
-func MealListIngredients(ms services.MealService) fiber.Handler {
+func (h mealHandler) ListIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 		if id == "" {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, errors.New("bad id"))
 		}
 
-		i, err := ms.ListIngredients(id)
+		i, err := h.ms.ListIngredients(id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -198,7 +215,7 @@ func MealListIngredients(ms services.MealService) fiber.Handler {
 	}
 }
 
-// MealIngredientUpdate is a function to update weight of ingredient in meal
+// UpdateIngredient is a function to update weight of ingredient in meal
 // @Summary Update weight of ingredient in meal
 // @Description Update weight of ingredient in meal
 // @Tags Meal
@@ -207,7 +224,7 @@ func MealListIngredients(ms services.MealService) fiber.Handler {
 // @Produce json
 // @Success 200 {object} responses.ResponseAdd
 // @Router /meal/ingredient/${id} [put]
-func MealIngredientUpdate(ms services.MealService) fiber.Handler {
+func (h mealHandler) UpdateIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 		if id == "" {
@@ -220,7 +237,7 @@ func MealIngredientUpdate(ms services.MealService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		err = ms.UpdateIngredient(id, *f)
+		err = h.ms.UpdateIngredient(id, *f)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -229,7 +246,7 @@ func MealIngredientUpdate(ms services.MealService) fiber.Handler {
 	}
 }
 
-// MealIngredientDelete is a function to delete ingredient from meal
+// DeleteIngredient is a function to delete ingredient from meal
 // @Summary Delete ingredient from meal
 // @Description Delete ingredient from meal
 // @Tags Meal
@@ -237,18 +254,25 @@ func MealIngredientUpdate(ms services.MealService) fiber.Handler {
 // @Produce json
 // @Success 200 {object} responses.ResponseStatus
 // @Router /meal/ingredient/${id} [delete]
-func MealIngredientDelete(ms services.MealService) fiber.Handler {
+func (h mealHandler) DeleteIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 		if id == "" {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, errors.New("bad id"))
 		}
 
-		err := ms.DeleteIngredient(id)
+		err := h.ms.DeleteIngredient(id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
 		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": true})
+	}
+}
+
+func NewMealHandler(as services.AuthService, ms services.MealService) MealHandler {
+	return &mealHandler{
+		ms: ms,
+		as: as,
 	}
 }

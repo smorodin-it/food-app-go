@@ -72,16 +72,17 @@ func SetupRoutes(app *fiber.App) {
 	ingredient.Put("/:id", ih.Update())
 
 	// Meal
+	mh := handlers.NewMealHandler(authServ, mealServ)
 	meal := api.Group("/meal")
-	meal.Get("/", handlers.MealListByUser(mealServ))
-	meal.Get("/all", handlers.MealList(mealServ))
-	meal.Post("/", handlers.MealCreate(mealServ, authServ))
-	meal.Get("/:id", handlers.MealRetrieve(mealServ))
-	meal.Put("/:id", handlers.MealUpdate(mealServ))
-	meal.Get("/:id/ingredient", handlers.MealListIngredients(mealServ))
-	meal.Post("/ingredient", handlers.MealAddIngredient(mealServ))
-	meal.Put("/ingredient/:id", handlers.MealIngredientUpdate(mealServ))
-	meal.Delete("/ingredient/:id", handlers.MealIngredientDelete(mealServ))
+	meal.Get("/", mh.ListByUser())
+	meal.Get("/all", mh.List())
+	meal.Post("/", mh.Create())
+	meal.Get("/:id", mh.Retrieve())
+	meal.Put("/:id", mh.Update())
+	meal.Get("/:id/ingredient", mh.ListIngredient())
+	meal.Post("/ingredient", mh.AddIngredient())
+	meal.Put("/ingredient/:id", mh.UpdateIngredient())
+	meal.Delete("/ingredient/:id", mh.DeleteIngredient())
 
 	//	Measurement
 	measurement := api.Group("/measurement")
