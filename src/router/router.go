@@ -64,11 +64,12 @@ func SetupRoutes(app *fiber.App) {
 	//user.Put("/:id", placeholderHandler)
 
 	// Ingredient
+	ih := handlers.NewIngredientHandler(authServ, ingredientServ)
 	ingredient := api.Group("/ingredient")
-	ingredient.Get("/", handlers.IngredientList(ingredientServ))
-	ingredient.Post("/", handlers.IngredientCreate(ingredientServ, authServ))
-	ingredient.Get("/:id", handlers.IngredientRetrieve(ingredientServ))
-	ingredient.Put("/:id", handlers.IngredientUpdate(ingredientServ))
+	ingredient.Get("/", ih.List())
+	ingredient.Post("/", ih.Create())
+	ingredient.Get("/:id", ih.Retrieve())
+	ingredient.Put("/:id", ih.Update())
 
 	// Meal
 	meal := api.Group("/meal")
