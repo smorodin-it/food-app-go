@@ -8,7 +8,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func InventoryList(is services.InventoryService) fiber.Handler {
+type InventoryHandler interface {
+	List() fiber.Handler
+	Create() fiber.Handler
+	Retrieve() fiber.Handler
+	Update() fiber.Handler
+}
+
+type inventoryHandler struct {
+	as services.AuthService
+	is services.InventoryService
+}
+
+func (h inventoryHandler) List() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		q := new(forms.PaginationQuery)
 		err := ctx.QueryParser(q)
@@ -16,7 +28,7 @@ func InventoryList(is services.InventoryService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		list, err := is.List(q.Page, q.PerPage)
+		list, err := h.is.List(q.Page, q.PerPage)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
@@ -25,7 +37,7 @@ func InventoryList(is services.InventoryService) fiber.Handler {
 	}
 }
 
-func InventoryCreate(is services.InventoryService, as services.AuthService) fiber.Handler {
+func (h inventoryHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		f := new(forms.InventoryForm)
 		err := ctx.BodyParser(f)
@@ -33,12 +45,12 @@ func InventoryCreate(is services.InventoryService, as services.AuthService) fibe
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		userId, err := as.GetUserIdFromToken(ctx)
+		userId, err := h.as.GetUserIdFromToken(ctx)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		id, err := is.Create(f, userId.(string))
+		id, err := h.is.Create(f, userId.(string))
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -47,14 +59,14 @@ func InventoryCreate(is services.InventoryService, as services.AuthService) fibe
 	}
 }
 
-func InventoryRetrieve(is services.InventoryService) fiber.Handler {
+func (h inventoryHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 		if id == "" {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, errors.New("bad id"))
 		}
 
-		inventory, err := is.Retrieve(id)
+		inventory, err := h.is.Retrieve(id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -63,7 +75,7 @@ func InventoryRetrieve(is services.InventoryService) fiber.Handler {
 	}
 }
 
-func InventoryUpdate(is services.InventoryService) fiber.Handler {
+func (h inventoryHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 		if id == "" {
@@ -76,11 +88,18 @@ func InventoryUpdate(is services.InventoryService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		err = is.Update(f, id)
+		err = h.is.Update(f, id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
 		return utils.GetResponseStatus(ctx, true)
+	}
+}
+
+func NewInventoryHandler(as services.AuthService, is services.InventoryService) InventoryHandler {
+	return &inventoryHandler{
+		as: as,
+		is: is,
 	}
 }

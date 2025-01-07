@@ -94,9 +94,10 @@ func SetupRoutes(app *fiber.App) {
 	measurement.Delete("/:id", meh.Delete())
 
 	//	Inventory
+	invh := handlers.NewInventoryHandler(authServ, inventoryServ)
 	inventory := api.Group("/inventory")
-	inventory.Get("/", handlers.InventoryList(inventoryServ))
-	inventory.Post("/", handlers.InventoryCreate(inventoryServ, authServ))
-	inventory.Get("/:id", handlers.InventoryRetrieve(inventoryServ))
-	inventory.Put("/:id", handlers.InventoryUpdate(inventoryServ))
+	inventory.Get("/", invh.List())
+	inventory.Post("/", invh.Create())
+	inventory.Get("/:id", invh.Retrieve())
+	inventory.Put("/:id", invh.Update())
 }
