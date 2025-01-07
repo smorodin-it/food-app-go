@@ -29,9 +29,10 @@ func SetupRoutes(app *fiber.App) {
 	api := app.Group("/api")
 
 	// Auth
+	ah := handlers.NewAuthHandler(authServ)
 	auth := api.Group("/auth")
-	auth.Post("/", handlers.AuthUser(authServ))
-	auth.Post("/refresh", handlers.RefreshTokens(authServ))
+	auth.Post("/", ah.AuthUser())
+	auth.Post("/refresh", ah.RefreshToken())
 
 	api.Use(jwtware.New(jwtware.Config{
 		SigningKey: jwtware.SigningKey{Key: []byte(constants.AuthSignKey)},

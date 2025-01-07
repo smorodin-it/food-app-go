@@ -7,6 +7,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type AuthHandler interface {
+	AuthUser() fiber.Handler
+	RefreshToken() fiber.Handler
+}
+
+type authHandler struct {
+	as services.AuthService
+}
+
 // AuthUser is a function to get tokens to work with app
 // @Summary Get Auth tokens using credentials
 // @Description Get access and refresh tokens
@@ -16,7 +25,7 @@ import (
 // @Produce plain
 // @Success 200
 // @Router /auth [post]
-func AuthUser(as services.AuthService) fiber.Handler {
+func (h authHandler) AuthUser() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		f := new(forms.FormAuth)
 		err := ctx.BodyParser(f)
@@ -24,7 +33,7 @@ func AuthUser(as services.AuthService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		tokens, err := as.AuthUser(*f)
+		tokens, err := h.as.AuthUser(*f)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -35,14 +44,14 @@ func AuthUser(as services.AuthService) fiber.Handler {
 	}
 }
 
-// RefreshTokens is a function to refresh tokens
+// RefreshToken is a function to refresh tokens
 // @Summary Get new tokens using refresh token
 // @Description Get access and refresh tokens
 // @Tags Auth
 // @Produce plain
 // @Success 200
 // @Router /auth/refresh [post]
-func RefreshTokens(as services.AuthService) fiber.Handler {
+func (h authHandler) RefreshToken() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		// Get refresh token from cookies
 		form := new(forms.RefreshForm)
@@ -57,7 +66,7 @@ func RefreshTokens(as services.AuthService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		tokens, err := as.RefreshTokens(*form)
+		tokens, err := h.as.RefreshTokens(*form)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
@@ -66,5 +75,10 @@ func RefreshTokens(as services.AuthService) fiber.Handler {
 
 		return utils.GetResponseStatus(ctx, true)
 	}
+}
 
+func NewAuthHandler(as services.AuthService) AuthHandler {
+	return &authHandler{
+		as: as,
+	}
 }
