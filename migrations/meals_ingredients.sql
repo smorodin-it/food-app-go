@@ -4,8 +4,8 @@ create table meals_ingredients
     meal_id           varchar(36) not null,
     ingredient_id     varchar(36) not null,
     ingredient_weight int         not null,
-    created_at        timestamp with time zone default now(),
-    updated_at        timestamp with time zone default now(),
+    created_at        timestamp without time zone default now(),
+    updated_at        timestamp without time zone default now(),
 
     primary key (id),
 

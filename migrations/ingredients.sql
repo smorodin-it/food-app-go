@@ -9,8 +9,8 @@ create table ingredients
     carbs           int,
     fats            int,
     calories        int,
-    created_at      timestamp with time zone default now(),
-    updated_at      timestamp with time zone default now(),
+    created_at      timestamp without time zone default now(),
+    updated_at      timestamp without time zone default now(),
 
     primary key (ingredient_id),
 
