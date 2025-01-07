@@ -7,17 +7,33 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func MeasurementListByUserId(ms services.MeasurementService) fiber.Handler {
-	return func(ctx *fiber.Ctx) error {
-		userId := utils.GetUserIDFromToken(ctx)
+type MeasurementHandler interface {
+	ListByUserId() fiber.Handler
+	Create() fiber.Handler
+	Retrieve() fiber.Handler
+	Update() fiber.Handler
+	Delete() fiber.Handler
+}
 
-		q := new(forms.PaginationQuery)
-		err := ctx.QueryParser(q)
+type measurementHandler struct {
+	as services.AuthService
+	ms services.MeasurementService
+}
+
+func (h measurementHandler) ListByUserId() fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		userId, err := h.as.GetUserIdFromToken(ctx)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		measurements, err := ms.ListByUserId(q.Page, q.PerPage, userId)
+		q := new(forms.PaginationQuery)
+		err = ctx.QueryParser(q)
+		if err != nil {
+			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
+		}
+
+		measurements, err := h.ms.ListByUserId(q.Page, q.PerPage, userId.(string))
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -26,7 +42,7 @@ func MeasurementListByUserId(ms services.MeasurementService) fiber.Handler {
 	}
 }
 
-func MeasurementCreate(ms services.MeasurementService) fiber.Handler {
+func (h measurementHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		f := new(forms.MeasurementCreateForm)
 		err := ctx.BodyParser(f)
@@ -34,7 +50,7 @@ func MeasurementCreate(ms services.MeasurementService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		id, err := ms.Create(*f)
+		id, err := h.ms.Create(*f)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -43,11 +59,11 @@ func MeasurementCreate(ms services.MeasurementService) fiber.Handler {
 	}
 }
 
-func MeasurementRetrieve(ms services.MeasurementService) fiber.Handler {
+func (h measurementHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 
-		measurement, err := ms.Retrieve(id)
+		measurement, err := h.ms.Retrieve(id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -56,7 +72,7 @@ func MeasurementRetrieve(ms services.MeasurementService) fiber.Handler {
 	}
 }
 
-func MeasurementUpdate(ms services.MeasurementService) fiber.Handler {
+func (h measurementHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 		f := new(forms.MeasurementUpdateForm)
@@ -65,7 +81,7 @@ func MeasurementUpdate(ms services.MeasurementService) fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		err = ms.Update(*f, id)
+		err = h.ms.Update(*f, id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
@@ -74,16 +90,22 @@ func MeasurementUpdate(ms services.MeasurementService) fiber.Handler {
 	}
 }
 
-func MeasurementDelete(ms services.MeasurementService) fiber.Handler {
+func (h measurementHandler) Delete() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		id := ctx.Params("id")
 
-		err := ms.Delete(id)
+		err := h.ms.Delete(id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
 		return utils.GetResponseStatus(ctx, true)
 	}
+}
 
+func NewMeasurementHandler(as services.AuthService, ms services.MeasurementService) MeasurementHandler {
+	return &measurementHandler{
+		as: as,
+		ms: ms,
+	}
 }

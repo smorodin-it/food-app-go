@@ -47,6 +47,7 @@ func CalcPagination(page int, perPage int) (limit int, offset int, withPaginatio
 	return limit, offset, withPagination
 }
 
+// TODO: Check what to use this function or method from services.AuthService
 func GetUserIDFromToken(ctx *fiber.Ctx) string {
 	return ctx.Locals("user").(*jwt.Token).Claims.(jwt.MapClaims)["id"].(string)
 }

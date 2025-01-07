@@ -85,12 +85,13 @@ func SetupRoutes(app *fiber.App) {
 	meal.Delete("/ingredient/:id", mh.DeleteIngredient())
 
 	//	Measurement
+	meh := handlers.NewMeasurementHandler(authServ, measurementServ)
 	measurement := api.Group("/measurement")
-	measurement.Get("/", handlers.MeasurementListByUserId(measurementServ))
-	measurement.Post("/", handlers.MeasurementCreate(measurementServ))
-	measurement.Post("/:id", handlers.MeasurementRetrieve(measurementServ))
-	measurement.Put("/:id", handlers.MeasurementUpdate(measurementServ))
-	measurement.Delete("/:id", handlers.MeasurementDelete(measurementServ))
+	measurement.Get("/", meh.ListByUserId())
+	measurement.Post("/", meh.Create())
+	measurement.Post("/:id", meh.Retrieve())
+	measurement.Put("/:id", meh.Update())
+	measurement.Delete("/:id", meh.Delete())
 
 	//	Inventory
 	inventory := api.Group("/inventory")

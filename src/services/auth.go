@@ -45,6 +45,7 @@ func (s authService) generateTokens(user *domains.User) (*responses.ResponseToke
 	return &responses.ResponseTokens{Token: at, RefreshToken: rt}, nil
 }
 
+// TODO: Check what to use this method or function from utils.GetUserIDFromToken
 func (s authService) GetUserIdFromToken(ctx *fiber.Ctx) (id interface{}, err error) {
 	token := ctx.Get("Authorization", "")
 	token = strings.Split(token, "Bearer ")[1]
