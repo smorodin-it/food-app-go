@@ -148,6 +148,15 @@ definitions:
       error:
         type: string
     type: object
+  responses.ResponseApi-array_domains_Measurement:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/domains.Measurement'
+        type: array
+      error:
+        type: string
+    type: object
   responses.ResponseApi-array_responses_MealIngredientResp:
     properties:
       data:
@@ -175,6 +184,13 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/domains.Meal'
+      error:
+        type: string
+    type: object
+  responses.ResponseApi-domains_Measurement:
+    properties:
+      data:
+        $ref: '#/definitions/domains.Measurement'
       error:
         type: string
     type: object
@@ -633,9 +649,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/domains.Measurement'
-            type: array
+            $ref: '#/definitions/responses.ResponseApi-array_domains_Measurement'
       security:
       - ApiKeyAuth: []
       summary: Get measurements list by user id
@@ -656,7 +670,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/responses.ResponseAdd'
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseAdd'
       security:
       - ApiKeyAuth: []
       summary: Create new measurement
@@ -677,7 +691,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.ResponseStatus'
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseStatus'
       security:
       - ApiKeyAuth: []
       summary: Delete measurement
@@ -697,7 +711,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domains.Measurement'
+            $ref: '#/definitions/responses.ResponseApi-domains_Measurement'
       security:
       - ApiKeyAuth: []
       summary: Get measurement by id
@@ -723,7 +737,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.ResponseStatus'
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseStatus'
       security:
       - ApiKeyAuth: []
       summary: Update measurement

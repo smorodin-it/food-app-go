@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"food-backend/src/forms"
+	_ "food-backend/src/responses"
 	"food-backend/src/services"
 	"food-backend/src/utils"
 	"github.com/gofiber/fiber/v2"
@@ -27,7 +28,7 @@ type measurementHandler struct {
 // @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
-// @Success 200 {object} []domains.Measurement
+// @Success 200 {object} responses.ResponseApi[ []domains.Measurement ]
 // @Router /measurement [get]
 func (h measurementHandler) ListByUserId() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -58,7 +59,7 @@ func (h measurementHandler) ListByUserId() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request query forms.MeasurementCreateForm true "body"
 // @Produce json
-// @Success 201 {object} responses.ResponseAdd
+// @Success 201 {object} responses.ResponseApi[ responses.ResponseAdd ]
 // @Router /measurement [post]
 func (h measurementHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -84,7 +85,7 @@ func (h measurementHandler) Create() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
-// @Success 200 {object} domains.Measurement
+// @Success 200 {object} responses.ResponseApi[ domains.Measurement ]
 // @Router /measurement/{id} [get]
 func (h measurementHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -107,7 +108,7 @@ func (h measurementHandler) Retrieve() fiber.Handler {
 // @Param request path string true "id"
 // @Param request body forms.MeasurementUpdateForm true "body"
 // @Produce json
-// @Success 200 {object} responses.ResponseStatus
+// @Success 200 {object} responses.ResponseApi[ responses.ResponseStatus ]
 // @Router /measurement/{id} [put]
 func (h measurementHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -134,7 +135,7 @@ func (h measurementHandler) Update() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
-// @Success 200 {object} responses.ResponseStatus
+// @Success 200 {object} responses.ResponseApi[ responses.ResponseStatus ]
 // @Router /measurement/{id} [delete]
 func (h measurementHandler) Delete() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {

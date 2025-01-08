@@ -708,10 +708,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domains.Measurement"
-                            }
+                            "$ref": "#/definitions/responses.ResponseApi-array_domains_Measurement"
                         }
                     }
                 }
@@ -746,7 +743,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/responses.ResponseAdd"
+                            "$ref": "#/definitions/responses.ResponseApi-responses_ResponseAdd"
                         }
                     }
                 }
@@ -780,7 +777,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Measurement"
+                            "$ref": "#/definitions/responses.ResponseApi-domains_Measurement"
                         }
                     }
                 }
@@ -821,7 +818,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.ResponseStatus"
+                            "$ref": "#/definitions/responses.ResponseApi-responses_ResponseStatus"
                         }
                     }
                 }
@@ -853,7 +850,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.ResponseStatus"
+                            "$ref": "#/definitions/responses.ResponseApi-responses_ResponseStatus"
                         }
                     }
                 }
@@ -1091,6 +1088,20 @@
                 }
             }
         },
+        "responses.ResponseApi-array_domains_Measurement": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domains.Measurement"
+                    }
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.ResponseApi-array_responses_MealIngredientResp": {
             "type": "object",
             "properties": {
@@ -1132,6 +1143,17 @@
             "properties": {
                 "data": {
                     "$ref": "#/definitions/domains.Meal"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ResponseApi-domains_Measurement": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/domains.Measurement"
                 },
                 "error": {
                     "type": "string"
