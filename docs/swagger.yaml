@@ -53,14 +53,16 @@ definitions:
     type: object
   domains.Measurement:
     properties:
-      date:
-        type: string
       measurementId:
         type: string
       measurementWeight:
         type: integer
       userId:
         type: string
+    required:
+    - measurementId
+    - measurementWeight
+    - userId
     type: object
   forms.FormAuth:
     properties:

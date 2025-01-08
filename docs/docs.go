@@ -941,10 +941,12 @@ const docTemplate = `{
         },
         "domains.Measurement": {
             "type": "object",
+            "required": [
+                "measurementId",
+                "measurementWeight",
+                "userId"
+            ],
             "properties": {
-                "date": {
-                    "type": "string"
-                },
                 "measurementId": {
                     "type": "string"
                 },
