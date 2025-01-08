@@ -866,6 +866,11 @@ const docTemplate = `{
     "definitions": {
         "domains.Ingredient": {
             "type": "object",
+            "required": [
+                "id",
+                "manufacturer",
+                "name"
+            ],
             "properties": {
                 "barcode": {
                     "type": "string"
@@ -895,6 +900,11 @@ const docTemplate = `{
         },
         "domains.Inventory": {
             "type": "object",
+            "required": [
+                "inventoryId",
+                "name",
+                "userId"
+            ],
             "properties": {
                 "inventoryId": {
                     "type": "string"
@@ -912,6 +922,11 @@ const docTemplate = `{
         },
         "domains.Meal": {
             "type": "object",
+            "required": [
+                "id",
+                "name",
+                "totalWeight"
+            ],
             "properties": {
                 "id": {
                     "type": "string"
@@ -1032,6 +1047,11 @@ const docTemplate = `{
         },
         "responses.MealIngredientResp": {
             "type": "object",
+            "required": [
+                "id",
+                "name",
+                "weight"
+            ],
             "properties": {
                 "id": {
                     "type": "string"

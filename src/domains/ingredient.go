@@ -3,15 +3,15 @@ package domains
 import "time"
 
 type Ingredient struct {
-	IngredientID   string    `json:"id" db:"ingredient_id"`
-	UserId         string    `json:"-" db:"user_id"`
-	IngredientName string    `json:"name" db:"ingredient_name"`
-	Manufacturer   string    `json:"manufacturer" db:"manufacturer"`
-	Barcode        *string   `json:"barcode" db:"barcode"`
-	Proteins       int       `json:"proteins" db:"proteins"`
-	Carbs          int       `json:"carbs" db:"carbs"`
-	Fats           int       `json:"fats" db:"fats"`
-	Calories       int       `json:"calories" db:"calories"`
-	CreatedAt      time.Time `json:"-" db:"created_at"`
-	UpdatedAt      time.Time `json:"-" db:"updated_at"`
+	IngredientID   string    `db:"ingredient_id" json:"id" validate:"required"`
+	UserId         string    `db:"user_id" json:"-" validate:"required"`
+	IngredientName string    `db:"ingredient_name" json:"name" validate:"required"`
+	Manufacturer   string    `db:"manufacturer" json:"manufacturer" validate:"required"`
+	Barcode        *string   `db:"barcode" json:"barcode"`
+	Proteins       int       `db:"proteins" json:"proteins"`
+	Carbs          int       `db:"carbs" json:"carbs"`
+	Fats           int       `db:"fats" json:"fats"`
+	Calories       int       `db:"calories" json:"calories"`
+	CreatedAt      time.Time `db:"created_at" json:"-" validate:"required"`
+	UpdatedAt      time.Time `db:"updated_at" json:"-" validate:"required"`
 }

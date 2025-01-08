@@ -18,6 +18,10 @@ definitions:
         type: string
       proteins:
         type: integer
+    required:
+    - id
+    - manufacturer
+    - name
     type: object
   domains.Inventory:
     properties:
@@ -29,6 +33,10 @@ definitions:
         type: string
       weight:
         type: integer
+    required:
+    - inventoryId
+    - name
+    - userId
     type: object
   domains.Meal:
     properties:
@@ -38,6 +46,10 @@ definitions:
         type: string
       totalWeight:
         type: integer
+    required:
+    - id
+    - name
+    - totalWeight
     type: object
   domains.Measurement:
     properties:
@@ -115,6 +127,10 @@ definitions:
         type: string
       weight:
         type: integer
+    required:
+    - id
+    - name
+    - weight
     type: object
   responses.ResponseAdd:
     properties:
