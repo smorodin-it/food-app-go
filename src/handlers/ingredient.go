@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"food-backend/src/forms"
+	_ "food-backend/src/responses"
 	"food-backend/src/services"
 	"food-backend/src/utils"
 	"github.com/gofiber/fiber/v2"
@@ -27,7 +28,7 @@ type ingredientHandler struct {
 // @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
-// @Success 200 {object} []domains.Ingredient
+// @Success 200 {object} responses.ResponseApi[ []domains.Ingredient ]
 // @Router /ingredient [get]
 func (h ingredientHandler) List() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -43,7 +44,7 @@ func (h ingredientHandler) List() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(list)
+		return utils.GetResponseData(ctx, list)
 	}
 }
 
@@ -54,7 +55,7 @@ func (h ingredientHandler) List() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request body forms.IngredientForm true "body"
 // @Produce json
-// @Success 201 {object} responses.ResponseAdd
+// @Success 201 {object} responses.ResponseApi[ responses.ResponseAdd ]
 // @Router /ingredient [post]
 func (h ingredientHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -85,7 +86,7 @@ func (h ingredientHandler) Create() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
-// @Success 200 {object} domains.Ingredient
+// @Success 200 {object} responses.ResponseApi[ domains.Ingredient ]
 // @Router /ingredient/{id} [get]
 func (h ingredientHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -99,7 +100,7 @@ func (h ingredientHandler) Retrieve() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(ingredient)
+		return utils.GetResponseData(ctx, ingredient)
 	}
 }
 
@@ -111,7 +112,7 @@ func (h ingredientHandler) Retrieve() fiber.Handler {
 // @Param request path string true "id"
 // @Param request body forms.IngredientForm true "body"
 // @Produce json
-// @Success 200 {object} responses.ResponseStatus
+// @Success 200 {object} responses.ResponseApi[ responses.ResponseStatus ]
 // @Router /ingredient/{id} [put]
 func (h ingredientHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {

@@ -52,14 +52,30 @@ func GetUserIDFromToken(ctx *fiber.Ctx) string {
 	return ctx.Locals("user").(*jwt.Token).Claims.(jwt.MapClaims)["id"].(string)
 }
 
-func GetResponseAdd(ctx *fiber.Ctx, id string) error {
-	return ctx.Status(fiber.StatusCreated).JSON(responses.ResponseAdd{Id: id})
-}
-
-func GetResponseStatus(ctx *fiber.Ctx, status bool) error {
-	return ctx.Status(fiber.StatusOK).JSON(responses.ResponseStatus{Status: status})
+func GetResponseData(ctx *fiber.Ctx, data any) error {
+	return ctx.Status(fiber.StatusOK).JSON(&responses.ResponseApi[any]{
+		Data:  data,
+		Error: nil,
+	})
 }
 
 func GetResponseError(ctx *fiber.Ctx, status int, err error) error {
-	return ctx.Status(status).JSON(fiber.Map{"error": err.Error()})
+	e := err.Error()
+
+	return ctx.Status(status).JSON(&responses.ResponseApi[any]{
+		Data:  nil,
+		Error: &e,
+	})
+}
+
+func GetResponseAdd(ctx *fiber.Ctx, id string) error {
+	return GetResponseData(ctx, responses.ResponseAdd{
+		Id: id,
+	})
+}
+
+func GetResponseStatus(ctx *fiber.Ctx, status bool) error {
+	return GetResponseData(ctx, responses.ResponseStatus{
+		Status: status,
+	})
 }

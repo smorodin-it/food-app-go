@@ -7,3 +7,8 @@ type ResponseAdd struct {
 type ResponseStatus struct {
 	Status bool `json:"status"`
 }
+
+type ResponseApi[T any] struct {
+	Data  T       `json:"data"`
+	Error *string `json:"error"`
+}

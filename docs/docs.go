@@ -94,10 +94,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domains.Ingredient"
-                            }
+                            "$ref": "#/definitions/responses.ResponseApi-array_domains_Ingredient"
                         }
                     }
                 }
@@ -131,7 +128,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/responses.ResponseAdd"
+                            "$ref": "#/definitions/responses.ResponseApi-responses_ResponseAdd"
                         }
                     }
                 }
@@ -165,7 +162,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domains.Ingredient"
+                            "$ref": "#/definitions/responses.ResponseApi-domains_Ingredient"
                         }
                     }
                 }
@@ -206,7 +203,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/responses.ResponseStatus"
+                            "$ref": "#/definitions/responses.ResponseApi-responses_ResponseStatus"
                         }
                     }
                 }
@@ -1066,6 +1063,53 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ResponseApi-array_domains_Ingredient": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domains.Ingredient"
+                    }
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ResponseApi-domains_Ingredient": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/domains.Ingredient"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ResponseApi-responses_ResponseAdd": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/responses.ResponseAdd"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ResponseApi-responses_ResponseStatus": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/responses.ResponseStatus"
+                },
+                "error": {
                     "type": "string"
                 }
             }
