@@ -25,18 +25,16 @@ definitions:
     type: object
   domains.Inventory:
     properties:
-      inventoryId:
+      id:
         type: string
       name:
-        type: string
-      userId:
         type: string
       weight:
         type: integer
     required:
-    - inventoryId
+    - id
     - name
-    - userId
+    - weight
     type: object
   domains.Meal:
     properties:
@@ -53,16 +51,13 @@ definitions:
     type: object
   domains.Measurement:
     properties:
-      measurementId:
+      id:
         type: string
       measurementWeight:
         type: integer
-      userId:
-        type: string
     required:
-    - measurementId
+    - id
     - measurementWeight
-    - userId
     type: object
   forms.AuthForm:
     properties:

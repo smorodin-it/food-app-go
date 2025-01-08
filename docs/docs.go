@@ -903,18 +903,15 @@ const docTemplate = `{
         "domains.Inventory": {
             "type": "object",
             "required": [
-                "inventoryId",
+                "id",
                 "name",
-                "userId"
+                "weight"
             ],
             "properties": {
-                "inventoryId": {
+                "id": {
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
-                },
-                "userId": {
                     "type": "string"
                 },
                 "weight": {
@@ -944,19 +941,15 @@ const docTemplate = `{
         "domains.Measurement": {
             "type": "object",
             "required": [
-                "measurementId",
-                "measurementWeight",
-                "userId"
+                "id",
+                "measurementWeight"
             ],
             "properties": {
-                "measurementId": {
+                "id": {
                     "type": "string"
                 },
                 "measurementWeight": {
                     "type": "integer"
-                },
-                "userId": {
-                    "type": "string"
                 }
             }
         },
