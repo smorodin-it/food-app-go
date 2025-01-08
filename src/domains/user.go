@@ -3,10 +3,10 @@ package domains
 import "time"
 
 type User struct {
-	UserID       string    `json:"id"  db:"user_id"`
-	Email        string    `json:"email" db:"email"`
-	RefreshToken *string   `json:"-" db:"refresh_token"`
-	PasswordHash string    `json:"-" db:"password_hash"`
-	CreatedAt    time.Time `json:"-" db:"created_at"`
-	UpdatedAt    time.Time `json:"-" db:"updated_at"`
+	UserID       string    `db:"user_id" json:"id"`
+	Email        string    `db:"email" json:"email"`
+	RefreshToken *string   `db:"refresh_token" json:"-"`
+	PasswordHash string    `db:"password_hash" json:"-"`
+	CreatedAt    time.Time `db:"created_at" json:"-"`
+	UpdatedAt    time.Time `db:"updated_at" json:"-"`
 }
