@@ -53,11 +53,11 @@ definitions:
     properties:
       id:
         type: string
-      measurementWeight:
+      weight:
         type: integer
     required:
     - id
-    - measurementWeight
+    - weight
     type: object
   forms.AuthForm:
     properties:
@@ -131,10 +131,10 @@ definitions:
     type: object
   forms.MeasurementUpdateForm:
     properties:
-      measurementWeight:
+      weight:
         type: integer
     required:
-    - measurementWeight
+    - weight
     type: object
   responses.MealIngredientResp:
     properties:
@@ -692,13 +692,13 @@ paths:
       description: Create new measurement
       parameters:
       - in: query
-        name: measurementWeight
-        required: true
-        type: integer
-      - in: query
         name: userId
         required: true
         type: string
+      - in: query
+        name: weight
+        required: true
+        type: integer
       produces:
       - application/json
       responses:

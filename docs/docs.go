@@ -735,14 +735,14 @@ const docTemplate = `{
                 "summary": "Create new measurement",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "name": "measurementWeight",
+                        "type": "string",
+                        "name": "userId",
                         "in": "query",
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "name": "userId",
+                        "type": "integer",
+                        "name": "weight",
                         "in": "query",
                         "required": true
                     }
@@ -942,13 +942,13 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "id",
-                "measurementWeight"
+                "weight"
             ],
             "properties": {
                 "id": {
                     "type": "string"
                 },
-                "measurementWeight": {
+                "weight": {
                     "type": "integer"
                 }
             }
@@ -1061,10 +1061,10 @@ const docTemplate = `{
         "forms.MeasurementUpdateForm": {
             "type": "object",
             "required": [
-                "measurementWeight"
+                "weight"
             ],
             "properties": {
-                "measurementWeight": {
+                "weight": {
                     "type": "integer"
                 }
             }
