@@ -21,13 +21,13 @@ type authHandler struct {
 // @Description Get access and refresh tokens
 // @Tags Auth
 // @Accept json
-// @Param credentials body forms.FormAuth true "Auth user"
+// @Param credentials body forms.AuthForm true "Auth user"
 // @Produce plain
 // @Success 200
 // @Router /auth [post]
 func (h authHandler) AuthUser() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		f := new(forms.FormAuth)
+		f := new(forms.AuthForm)
 		err := ctx.BodyParser(f)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)

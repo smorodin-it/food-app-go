@@ -17,7 +17,7 @@ import (
 
 type AuthService interface {
 	GetUserIdFromToken(ctx *fiber.Ctx) (id interface{}, err error)
-	AuthUser(form forms.FormAuth) (tokens *responses.ResponseTokens, err error)
+	AuthUser(form forms.AuthForm) (tokens *responses.ResponseTokens, err error)
 	RefreshTokens(form forms.RefreshForm) (tokens *responses.ResponseTokens, err error)
 }
 
@@ -67,8 +67,7 @@ func (s authService) GetUserIdFromToken(ctx *fiber.Ctx) (id interface{}, err err
 	}
 }
 
-func (s authService) AuthUser(form forms.FormAuth) (tokens *responses.ResponseTokens, err error) {
-
+func (s authService) AuthUser(form forms.AuthForm) (tokens *responses.ResponseTokens, err error) {
 	//	Get user by email
 	user, err := s.r.GetByEmail(form.Email)
 	if err != nil {

@@ -64,12 +64,15 @@ definitions:
     - measurementWeight
     - userId
     type: object
-  forms.FormAuth:
+  forms.AuthForm:
     properties:
       email:
         type: string
       password:
         type: string
+    required:
+    - email
+    - password
     type: object
   forms.IngredientForm:
     properties:
@@ -87,6 +90,9 @@ definitions:
         type: string
       proteins:
         type: integer
+    required:
+    - manufacturer
+    - name
     type: object
   forms.InventoryForm:
     properties:
@@ -94,6 +100,9 @@ definitions:
         type: string
       weight:
         type: integer
+    required:
+    - name
+    - weight
     type: object
   forms.MealForm:
     properties:
@@ -101,6 +110,9 @@ definitions:
         type: string
       totalWeight:
         type: integer
+    required:
+    - name
+    - totalWeight
     type: object
   forms.MealIngredientAddForm:
     properties:
@@ -110,16 +122,24 @@ definitions:
         type: string
       totalWeight:
         type: integer
+    required:
+    - ingredientId
+    - mealId
+    - totalWeight
     type: object
   forms.MealIngredientUpdateForm:
     properties:
       totalWeight:
         type: integer
+    required:
+    - totalWeight
     type: object
   forms.MeasurementUpdateForm:
     properties:
       measurementWeight:
         type: integer
+    required:
+    - measurementWeight
     type: object
   responses.MealIngredientResp:
     properties:
@@ -249,7 +269,7 @@ paths:
         name: credentials
         required: true
         schema:
-          $ref: '#/definitions/forms.FormAuth'
+          $ref: '#/definitions/forms.AuthForm'
       produces:
       - text/plain
       responses:
@@ -678,9 +698,11 @@ paths:
       parameters:
       - in: query
         name: measurementWeight
+        required: true
         type: integer
       - in: query
         name: userId
+        required: true
         type: string
       produces:
       - application/json

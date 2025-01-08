@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/forms.FormAuth"
+                            "$ref": "#/definitions/forms.AuthForm"
                         }
                     }
                 ],
@@ -737,12 +737,14 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "measurementWeight",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
                         "name": "userId",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -958,8 +960,12 @@ const docTemplate = `{
                 }
             }
         },
-        "forms.FormAuth": {
+        "forms.AuthForm": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -971,6 +977,10 @@ const docTemplate = `{
         },
         "forms.IngredientForm": {
             "type": "object",
+            "required": [
+                "manufacturer",
+                "name"
+            ],
             "properties": {
                 "barcode": {
                     "type": "string"
@@ -997,6 +1007,10 @@ const docTemplate = `{
         },
         "forms.InventoryForm": {
             "type": "object",
+            "required": [
+                "name",
+                "weight"
+            ],
             "properties": {
                 "name": {
                     "type": "string"
@@ -1008,6 +1022,10 @@ const docTemplate = `{
         },
         "forms.MealForm": {
             "type": "object",
+            "required": [
+                "name",
+                "totalWeight"
+            ],
             "properties": {
                 "name": {
                     "type": "string"
@@ -1019,6 +1037,11 @@ const docTemplate = `{
         },
         "forms.MealIngredientAddForm": {
             "type": "object",
+            "required": [
+                "ingredientId",
+                "mealId",
+                "totalWeight"
+            ],
             "properties": {
                 "ingredientId": {
                     "type": "string"
@@ -1033,6 +1056,9 @@ const docTemplate = `{
         },
         "forms.MealIngredientUpdateForm": {
             "type": "object",
+            "required": [
+                "totalWeight"
+            ],
             "properties": {
                 "totalWeight": {
                     "type": "integer"
@@ -1041,6 +1067,9 @@ const docTemplate = `{
         },
         "forms.MeasurementUpdateForm": {
             "type": "object",
+            "required": [
+                "measurementWeight"
+            ],
             "properties": {
                 "measurementWeight": {
                     "type": "integer"

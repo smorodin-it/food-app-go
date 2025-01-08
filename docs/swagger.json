@@ -29,7 +29,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/forms.FormAuth"
+                            "$ref": "#/definitions/forms.AuthForm"
                         }
                     }
                 ],
@@ -731,12 +731,14 @@
                     {
                         "type": "integer",
                         "name": "measurementWeight",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     },
                     {
                         "type": "string",
                         "name": "userId",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -952,8 +954,12 @@
                 }
             }
         },
-        "forms.FormAuth": {
+        "forms.AuthForm": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -965,6 +971,10 @@
         },
         "forms.IngredientForm": {
             "type": "object",
+            "required": [
+                "manufacturer",
+                "name"
+            ],
             "properties": {
                 "barcode": {
                     "type": "string"
@@ -991,6 +1001,10 @@
         },
         "forms.InventoryForm": {
             "type": "object",
+            "required": [
+                "name",
+                "weight"
+            ],
             "properties": {
                 "name": {
                     "type": "string"
@@ -1002,6 +1016,10 @@
         },
         "forms.MealForm": {
             "type": "object",
+            "required": [
+                "name",
+                "totalWeight"
+            ],
             "properties": {
                 "name": {
                     "type": "string"
@@ -1013,6 +1031,11 @@
         },
         "forms.MealIngredientAddForm": {
             "type": "object",
+            "required": [
+                "ingredientId",
+                "mealId",
+                "totalWeight"
+            ],
             "properties": {
                 "ingredientId": {
                     "type": "string"
@@ -1027,6 +1050,9 @@
         },
         "forms.MealIngredientUpdateForm": {
             "type": "object",
+            "required": [
+                "totalWeight"
+            ],
             "properties": {
                 "totalWeight": {
                     "type": "integer"
@@ -1035,6 +1061,9 @@
         },
         "forms.MeasurementUpdateForm": {
             "type": "object",
+            "required": [
+                "measurementWeight"
+            ],
             "properties": {
                 "measurementWeight": {
                     "type": "integer"

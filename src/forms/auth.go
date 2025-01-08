@@ -2,17 +2,17 @@ package forms
 
 import "errors"
 
-type FormAuth struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+type AuthForm struct {
+	Email    string `json:"email" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
-func (f FormAuth) Validate() error {
+func (f AuthForm) Validate() error {
 	return nil
 }
 
 type RefreshForm struct {
-	RefreshToken string `json:"refreshToken"`
+	RefreshToken string `json:"refreshToken" validate:"required"`
 }
 
 func (f RefreshForm) Validate() error {
