@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"food-backend/src/forms"
+	_ "food-backend/src/responses"
 	"food-backend/src/services"
 	"food-backend/src/utils"
 	"github.com/gofiber/fiber/v2"
@@ -32,7 +33,7 @@ type mealHandler struct {
 // @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
-// @Success 200 {object} []domains.Meal
+// @Success 200 {object} responses.ResponseApi[ []domains.Meal ]
 // @Router /meal/all [get]
 func (h mealHandler) List() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -59,7 +60,7 @@ func (h mealHandler) List() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
-// @Success 200 {object} []domains.Meal
+// @Success 200 {object} responses.ResponseApi[ []domains.Meal ]
 // @Router /meal [get]
 func (h mealHandler) ListByUser() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -88,7 +89,7 @@ func (h mealHandler) ListByUser() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request body forms.MealForm true "body"
 // @Produce json
-// @Success 201 {object} responses.ResponseAdd
+// @Success 201 {object} responses.ResponseApi[ responses.ResponseAdd ]
 // @Router /meal [post]
 func (h mealHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -121,7 +122,7 @@ func (h mealHandler) Create() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
-// @Success 200 {object} domains.Meal
+// @Success 200 {object} responses.ResponseApi[ domains.Meal ]
 // @Router /meal/{id} [get]
 func (h mealHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -147,7 +148,7 @@ func (h mealHandler) Retrieve() fiber.Handler {
 // @Param request path string true "id"
 // @Param request body forms.MealForm true "body"
 // @Produce json
-// @Success 200 {object} responses.ResponseStatus
+// @Success 200 {object} responses.ResponseApi[ responses.ResponseStatus ]
 // @Router /meal/{id} [put]
 func (h mealHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -178,7 +179,7 @@ func (h mealHandler) Update() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request body forms.MealIngredientAddForm true "body"
 // @Produce json
-// @Success 201 {object} responses.ResponseAdd
+// @Success 201 {object} responses.ResponseApi[ responses.ResponseAdd ]
 // @Router /meal/ingredient [post]
 func (h mealHandler) AddIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -204,7 +205,7 @@ func (h mealHandler) AddIngredient() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request path string true "meal id"
 // @Produce json
-// @Success 200 {object} []responses.MealIngredientResp
+// @Success 200 {object} responses.ResponseApi[ []responses.MealIngredientResp ]
 // @Router /meal/{id}/ingredient [get]
 func (h mealHandler) ListIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -230,7 +231,7 @@ func (h mealHandler) ListIngredient() fiber.Handler {
 // @Param request path string true "ingredient in meal id"
 // @Param request body forms.MealIngredientUpdateForm true "body"
 // @Produce json
-// @Success 200 {object} responses.ResponseAdd
+// @Success 200 {object} responses.ResponseApi[ responses.ResponseAdd ]
 // @Router /meal/ingredient/{id} [put]
 func (h mealHandler) UpdateIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -261,7 +262,7 @@ func (h mealHandler) UpdateIngredient() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request path string true "ingredient in meal id"
 // @Produce json
-// @Success 200 {object} responses.ResponseStatus
+// @Success 200 {object} responses.ResponseApi[ responses.ResponseStatus ]
 // @Router /meal/ingredient/{id} [delete]
 func (h mealHandler) DeleteIngredient() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {

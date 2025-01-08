@@ -139,6 +139,24 @@ definitions:
       error:
         type: string
     type: object
+  responses.ResponseApi-array_domains_Meal:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/domains.Meal'
+        type: array
+      error:
+        type: string
+    type: object
+  responses.ResponseApi-array_responses_MealIngredientResp:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/responses.MealIngredientResp'
+        type: array
+      error:
+        type: string
+    type: object
   responses.ResponseApi-domains_Ingredient:
     properties:
       data:
@@ -150,6 +168,13 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/domains.Inventory'
+      error:
+        type: string
+    type: object
+  responses.ResponseApi-domains_Meal:
+    properties:
+      data:
+        $ref: '#/definitions/domains.Meal'
       error:
         type: string
     type: object
@@ -406,9 +431,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/domains.Meal'
-            type: array
+            $ref: '#/definitions/responses.ResponseApi-array_domains_Meal'
       security:
       - ApiKeyAuth: []
       summary: Get meals list by auth user id
@@ -429,7 +452,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/responses.ResponseAdd'
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseAdd'
       security:
       - ApiKeyAuth: []
       summary: Create new meal
@@ -450,7 +473,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domains.Meal'
+            $ref: '#/definitions/responses.ResponseApi-domains_Meal'
       security:
       - ApiKeyAuth: []
       summary: Retrieve meal by id
@@ -476,7 +499,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.ResponseStatus'
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseStatus'
       security:
       - ApiKeyAuth: []
       summary: Update meal
@@ -497,9 +520,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/responses.MealIngredientResp'
-            type: array
+            $ref: '#/definitions/responses.ResponseApi-array_responses_MealIngredientResp'
       security:
       - ApiKeyAuth: []
       summary: Get ingredients list in meal
@@ -521,9 +542,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/domains.Meal'
-            type: array
+            $ref: '#/definitions/responses.ResponseApi-array_domains_Meal'
       security:
       - ApiKeyAuth: []
       summary: Get meals list
@@ -545,7 +564,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/responses.ResponseAdd'
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseAdd'
       security:
       - ApiKeyAuth: []
       summary: Add ingredient to meal
@@ -566,7 +585,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.ResponseStatus'
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseStatus'
       security:
       - ApiKeyAuth: []
       summary: Delete ingredient from meal
@@ -592,7 +611,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/responses.ResponseAdd'
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseAdd'
       security:
       - ApiKeyAuth: []
       summary: Update weight of ingredient in meal
