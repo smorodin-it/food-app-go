@@ -5,7 +5,6 @@ import (
 	"food-backend/src/forms"
 	"food-backend/src/repositories"
 	"github.com/google/uuid"
-	"time"
 )
 
 type MeasurementService interface {
@@ -34,7 +33,6 @@ func (s measurementService) Create(mf forms.MeasurementCreateForm) (id *string, 
 		MeasurementId:     uuid.New().String(),
 		UserId:            mf.UserId,
 		MeasurementWeight: mf.MeasurementWeight,
-		Date:              time.Now(),
 	}
 	err = s.r.Create(m)
 	if err != nil {

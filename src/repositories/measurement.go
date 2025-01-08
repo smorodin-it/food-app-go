@@ -22,10 +22,10 @@ func (r measurementRepository) ListByUserId(page int, perPage int, userId string
 	limit, offset, withPagination := utils.CalcPagination(page, perPage)
 
 	if withPagination {
-		sql := "SELECT * FROM measurements WHERE measurements.user_id = $1 ORDER BY date DESC  LIMIT $2 OFFSET $3"
+		sql := "SELECT * FROM measurements WHERE measurements.user_id = $1 ORDER BY created_at DESC  LIMIT $2 OFFSET $3"
 		err = r.db.Select(&measurements, sql, userId, limit, offset)
 	} else {
-		sql := "SELECT * FROM measurements WHERE measurements.user_id = $1 ORDER BY date DESC"
+		sql := "SELECT * FROM measurements WHERE measurements.user_id = $1 ORDER BY created_at DESC"
 		err = r.db.Select(&measurements, sql, userId)
 	}
 
@@ -37,8 +37,8 @@ func (r measurementRepository) ListByUserId(page int, perPage int, userId string
 }
 
 func (r measurementRepository) Create(measurement *domains.Measurement) (err error) {
-	sql := "INSERT INTO measurements (measurement_id, user_id, measurement_weight, date) VALUES ($1, $2, $3, $4)"
-	_, err = r.db.Exec(sql, measurement.MeasurementId, measurement.UserId, measurement.MeasurementWeight, measurement.Date)
+	sql := "INSERT INTO measurements (measurement_id, user_id, measurement_weight) VALUES ($1, $2, $3)"
+	_, err = r.db.Exec(sql, measurement.MeasurementId, measurement.UserId, measurement.MeasurementWeight)
 	if err != nil {
 		return err
 	}
