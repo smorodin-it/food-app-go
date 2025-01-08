@@ -49,7 +49,7 @@ func (h mealHandler) List() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(meals)
+		return utils.GetResponseData(ctx, meals)
 	}
 }
 
@@ -78,7 +78,7 @@ func (h mealHandler) ListByUser() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(meals)
+		return utils.GetResponseData(ctx, meals)
 	}
 }
 
@@ -136,7 +136,7 @@ func (h mealHandler) Retrieve() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(meal)
+		return utils.GetResponseData(ctx, meal)
 	}
 }
 
@@ -214,12 +214,12 @@ func (h mealHandler) ListIngredient() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, errors.New("bad id"))
 		}
 
-		i, err := h.ms.ListIngredients(id)
+		ingr, err := h.ms.ListIngredients(id)
 		if err != nil {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(i)
+		return utils.GetResponseData(ctx, ingr)
 	}
 }
 
@@ -276,7 +276,7 @@ func (h mealHandler) DeleteIngredient() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": true})
+		return utils.GetResponseStatus(ctx, true)
 	}
 }
 

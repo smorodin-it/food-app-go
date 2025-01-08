@@ -48,7 +48,7 @@ func (h measurementHandler) ListByUserId() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(measurements)
+		return utils.GetResponseData(ctx, measurements)
 	}
 }
 
@@ -96,7 +96,7 @@ func (h measurementHandler) Retrieve() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(measurement)
+		return utils.GetResponseData(ctx, measurement)
 	}
 }
 

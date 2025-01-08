@@ -43,7 +43,7 @@ func (h inventoryHandler) List() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusBadRequest, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(list)
+		return utils.GetResponseData(ctx, list)
 	}
 }
 
@@ -99,7 +99,7 @@ func (h inventoryHandler) Retrieve() fiber.Handler {
 			return utils.GetResponseError(ctx, fiber.StatusInternalServerError, err)
 		}
 
-		return ctx.Status(fiber.StatusOK).JSON(inventory)
+		return utils.GetResponseData(ctx, inventory)
 	}
 }
 
