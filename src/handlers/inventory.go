@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"food-backend/src/forms"
+	_ "food-backend/src/responses"
 	"food-backend/src/services"
 	"food-backend/src/utils"
 	"github.com/gofiber/fiber/v2"
@@ -27,7 +28,7 @@ type inventoryHandler struct {
 // @Security ApiKeyAuth
 // @Param request query forms.PaginationQuery true "pagination"
 // @Produce json
-// @Success 200 {object} []domains.Inventory
+// @Success 200 {object} responses.ResponseApi[ []domains.Inventory ]
 // @Router /inventory [get]
 func (h inventoryHandler) List() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -53,7 +54,7 @@ func (h inventoryHandler) List() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request body forms.InventoryForm true "body"
 // @Produce json
-// @Success 201 {object} responses.ResponseAdd
+// @Success 201 {object} responses.ResponseApi[ responses.ResponseAdd ]
 // @Router /inventory [post]
 func (h inventoryHandler) Create() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -84,7 +85,7 @@ func (h inventoryHandler) Create() fiber.Handler {
 // @Security ApiKeyAuth
 // @Param request path string true "id"
 // @Produce json
-// @Success 200 {object} domains.Inventory
+// @Success 200 {object} responses.ResponseApi[ domains.Inventory ]
 // @Router /inventory/{id} [get]
 func (h inventoryHandler) Retrieve() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -110,7 +111,7 @@ func (h inventoryHandler) Retrieve() fiber.Handler {
 // @Param request path string true "id"
 // @Param request body forms.InventoryForm true "body"
 // @Produce json
-// @Success 200 {object} responses.ResponseStatus
+// @Success 200 {object} responses.ResponseApi[ responses.ResponseStatus ]
 // @Router /inventory/{id} [put]
 func (h inventoryHandler) Update() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
