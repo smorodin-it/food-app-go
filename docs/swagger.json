@@ -1329,7 +1329,9 @@
         "handlers.TestForm": {
             "type": "object",
             "required": [
-                "required"
+                "dateWhen",
+                "required",
+                "testId"
             ],
             "properties": {
                 "arrayOfObject": {
@@ -1348,6 +1350,9 @@
                         "type": "string"
                     }
                 },
+                "dateWhen": {
+                    "type": "string"
+                },
                 "nestedObject": {
                     "$ref": "#/definitions/handlers.NestedObject"
                 },
@@ -1356,10 +1361,16 @@
                     "maxLength": 100,
                     "minLength": 2
                 },
+                "otherDate": {
+                    "type": "string"
+                },
                 "required": {
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 2
+                },
+                "testId": {
+                    "type": "string"
                 }
             }
         },

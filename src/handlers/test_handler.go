@@ -3,6 +3,7 @@ package handlers
 import (
 	_ "food-backend/src/responses"
 	"github.com/gofiber/fiber/v2"
+	"time"
 )
 
 type NestedObject struct {
@@ -25,6 +26,9 @@ type TestForm struct {
 	ArrayOfObject []NestedObject `json:"arrayOfObject" validate:"min=1,max=5"`
 	ArrayOfString []string       `json:"arrayOfString" validate:"min=2,max=5"`
 	NestedObject  *NestedObject  `json:"nestedObject"`
+	TestID        string         `json:"testId" validate:"required"`
+	DateWhen      time.Time      `json:"dateWhen" validate:"required"`
+	OtherDate     time.Time      `json:"otherDate"`
 }
 
 type TestHandler interface {

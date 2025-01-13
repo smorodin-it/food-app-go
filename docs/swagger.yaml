@@ -182,18 +182,26 @@ definitions:
         maxItems: 5
         minItems: 2
         type: array
+      dateWhen:
+        type: string
       nestedObject:
         $ref: '#/definitions/handlers.NestedObject'
       notRequired:
         maxLength: 100
         minLength: 2
         type: string
+      otherDate:
+        type: string
       required:
         maxLength: 100
         minLength: 2
         type: string
+      testId:
+        type: string
     required:
+    - dateWhen
     - required
+    - testId
     type: object
   responses.MealIngredientResp:
     properties:

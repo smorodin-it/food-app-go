@@ -1336,7 +1336,9 @@ const docTemplate = `{
         "handlers.TestForm": {
             "type": "object",
             "required": [
-                "required"
+                "dateWhen",
+                "required",
+                "testId"
             ],
             "properties": {
                 "arrayOfObject": {
@@ -1355,6 +1357,9 @@ const docTemplate = `{
                         "type": "string"
                     }
                 },
+                "dateWhen": {
+                    "type": "string"
+                },
                 "nestedObject": {
                     "$ref": "#/definitions/handlers.NestedObject"
                 },
@@ -1363,10 +1368,16 @@ const docTemplate = `{
                     "maxLength": 100,
                     "minLength": 2
                 },
+                "otherDate": {
+                    "type": "string"
+                },
                 "required": {
                     "type": "string",
                     "maxLength": 100,
                     "minLength": 2
+                },
+                "testId": {
+                    "type": "string"
                 }
             }
         },
