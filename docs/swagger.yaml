@@ -136,6 +136,65 @@ definitions:
     required:
     - weight
     type: object
+  handlers.NestedObject:
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+    required:
+    - name
+    - value
+    type: object
+  handlers.TestDomain:
+    properties:
+      id:
+        type: string
+      nestedArray:
+        items:
+          $ref: '#/definitions/handlers.NestedObject'
+        type: array
+      nestedArrayOfString:
+        items:
+          type: string
+        type: array
+      nestedObject:
+        $ref: '#/definitions/handlers.NestedObject'
+      notRequired:
+        type: string
+      required:
+        type: string
+    required:
+    - id
+    - required
+    type: object
+  handlers.TestForm:
+    properties:
+      arrayOfObject:
+        items:
+          $ref: '#/definitions/handlers.NestedObject'
+        maxItems: 5
+        minItems: 1
+        type: array
+      arrayOfString:
+        items:
+          type: string
+        maxItems: 5
+        minItems: 2
+        type: array
+      nestedObject:
+        $ref: '#/definitions/handlers.NestedObject'
+      notRequired:
+        maxLength: 100
+        minLength: 2
+        type: string
+      required:
+        maxLength: 100
+        minLength: 2
+        type: string
+    required:
+    - required
+    type: object
   responses.MealIngredientResp:
     properties:
       id:
@@ -190,11 +249,29 @@ definitions:
       error:
         type: string
     type: object
+  responses.ResponseApi-array_handlers_TestDomain:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/handlers.TestDomain'
+        type: array
+      error:
+        type: string
+    type: object
   responses.ResponseApi-array_responses_MealIngredientResp:
     properties:
       data:
         items:
           $ref: '#/definitions/responses.MealIngredientResp'
+        type: array
+      error:
+        type: string
+    type: object
+  responses.ResponseApi-array_string:
+    properties:
+      data:
+        items:
+          type: string
         type: array
       error:
         type: string
@@ -224,6 +301,13 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/domains.Measurement'
+      error:
+        type: string
+    type: object
+  responses.ResponseApi-handlers_TestDomain:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.TestDomain'
       error:
         type: string
     type: object
@@ -778,6 +862,138 @@ paths:
       summary: Update measurement
       tags:
       - Measurement
+  /test_handler:
+    get:
+      description: Get test list
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseApi-array_handlers_TestDomain'
+      security:
+      - ApiKeyAuth: []
+      summary: Get test list
+      tags:
+      - TestDomain
+    post:
+      description: Create new test
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.TestForm'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseAdd'
+      security:
+      - ApiKeyAuth: []
+      summary: Create new test
+      tags:
+      - TestDomain
+  /test_handler/{id}:
+    delete:
+      description: Delete test
+      parameters:
+      - description: ingredient in test id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseStatus'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete test
+      tags:
+      - TestDomain
+    get:
+      description: Retrieve test by id
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseApi-handlers_TestDomain'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve test by id
+      tags:
+      - TestDomain
+    put:
+      description: Update test
+      parameters:
+      - description: id
+        in: path
+        name: request
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.TestForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseStatus'
+      security:
+      - ApiKeyAuth: []
+      summary: Update test
+      tags:
+      - TestDomain
+  /test_handler/strings:
+    get:
+      description: Get test list
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: perPage
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseApi-array_string'
+      security:
+      - ApiKeyAuth: []
+      summary: Get test list
+      tags:
+      - TestDomain
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -101,4 +101,12 @@ func SetupRoutes(app *fiber.App) {
 	inventory.Post("/", invh.Create())
 	inventory.Get("/:id", invh.Retrieve())
 	inventory.Put("/:id", invh.Update())
+
+	//	 Test handler for swagger
+
+	//type testServ struct{}
+
+	//testh := handlers.NewTestHandler(&testServ{})
+	//test :=
+
 }
