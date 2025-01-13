@@ -136,6 +136,13 @@ definitions:
     required:
     - weight
     type: object
+  handlers.FilterForm:
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+    type: object
   handlers.NestedObject:
     properties:
       name:
@@ -913,6 +920,32 @@ paths:
       summary: Create new test
       tags:
       - TestDomain
+  /test_handler/{firstId}/{secondId}:
+    delete:
+      description: Delete test with multiple path args
+      parameters:
+      - description: first id
+        in: path
+        name: firstId
+        required: true
+        type: string
+      - description: second id
+        in: path
+        name: secondId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.ResponseApi-responses_ResponseStatus'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete test with multiple path args
+      tags:
+      - TestDomain
   /test_handler/{id}:
     delete:
       description: Delete test
@@ -978,6 +1011,49 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Update test
+      tags:
+      - TestDomain
+  /test_handler/filter/{firstId}/{secondId}/{thirdId}:
+    post:
+      description: ListWithFilterForm show filtered list
+      parameters:
+      - description: first id
+        in: path
+        name: firstId
+        required: true
+        type: string
+      - description: second id
+        in: path
+        name: secondId
+        required: true
+        type: string
+      - description: third id
+        in: path
+        name: thirdId
+        required: true
+        type: string
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: perPage
+        type: integer
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.FilterForm'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/responses.ResponseApi-array_handlers_TestDomain'
+      security:
+      - ApiKeyAuth: []
+      summary: ListWithFilterForm show filtered list
       tags:
       - TestDomain
   /test_handler/strings:

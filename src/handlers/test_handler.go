@@ -12,23 +12,28 @@ type NestedObject struct {
 }
 
 type TestDomain struct {
-	ID                  string         `json:"id" validate:"required"`
-	Required            string         `json:"required" validate:"required"`
-	NotRequired         string         `json:"notRequired"`
-	Nested              NestedObject   `json:"nestedObject"`
-	NestedArray         []NestedObject `json:"nestedArray"`
-	NestedArrayOfString []string       `json:"nestedArrayOfString"`
+	ID                  string          `json:"id" validate:"required"`
+	Required            string          `json:"required" validate:"required"`
+	NotRequired         *string         `json:"notRequired"`
+	Nested              *NestedObject   `json:"nestedObject"`
+	NestedArray         *[]NestedObject `json:"nestedArray"`
+	NestedArrayOfString *[]string       `json:"nestedArrayOfString"`
 }
 
 type TestForm struct {
 	Required      string         `json:"required" validate:"required,min=2,max=100"`
-	NotRequired   string         `json:"notRequired" validate:"min=2,max=100"`
+	NotRequired   *string        `json:"notRequired" validate:"min=2,max=100"`
 	ArrayOfObject []NestedObject `json:"arrayOfObject" validate:"min=1,max=5"`
 	ArrayOfString []string       `json:"arrayOfString" validate:"min=2,max=5"`
 	NestedObject  *NestedObject  `json:"nestedObject"`
 	TestID        string         `json:"testId" validate:"required"`
 	DateWhen      time.Time      `json:"dateWhen" validate:"required"`
-	OtherDate     time.Time      `json:"otherDate"`
+	OtherDate     *time.Time     `json:"otherDate"`
+}
+
+type FilterForm struct {
+	Name  *string `json:"name"`
+	Value *string `json:"value"`
 }
 
 type TestHandler interface {
@@ -38,6 +43,8 @@ type TestHandler interface {
 	Update() fiber.Handler
 	Delete() fiber.Handler
 	ListOfString() fiber.Handler
+	DeleteMultipleId() fiber.Handler
+	ListWithFilterForm() fiber.Handler
 }
 
 type testHandler struct {
@@ -136,6 +143,43 @@ func (t testHandler) Delete() fiber.Handler {
 // @Success 200 {object} responses.ResponseApi[ []string ]
 // @Router /test_handler/strings [get]
 func (t testHandler) ListOfString() fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		//TODO implement me
+		panic("implement me")
+	}
+}
+
+// DeleteMultipleId is a function to delete test by multiple ID
+// @Summary Delete test with multiple path args
+// @Description Delete test with multiple path args
+// @Tags TestDomain
+// @Security ApiKeyAuth
+// @Param firstId path string true "first id"
+// @Param secondId path string true "second id"
+// @Produce json
+// @Success 200 {object} responses.ResponseApi[ responses.ResponseStatus ]
+// @Router /test_handler/{firstId}/{secondId} [delete]
+func (t testHandler) DeleteMultipleId() fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		//TODO implement me
+		panic("implement me")
+	}
+}
+
+// ListWithFilterForm is a function to filter data
+// @Summary ListWithFilterForm show filtered list
+// @Description ListWithFilterForm show filtered list
+// @Tags TestDomain
+// @Security ApiKeyAuth
+// @Param firstId path string true "first id"
+// @Param secondId path string true "second id"
+// @Param thirdId path string true "third id"
+// @Param pagination query forms.PaginationQuery true "pagination"
+// @Param request body FilterForm true "body"
+// @Produce json
+// @Success 201 {object} responses.ResponseApi[ []TestDomain ]
+// @Router /test_handler/filter/{firstId}/{secondId}/{thirdId} [post]
+func (t testHandler) ListWithFilterForm() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		//TODO implement me
 		panic("implement me")

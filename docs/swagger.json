@@ -929,6 +929,73 @@
                 }
             }
         },
+        "/test_handler/filter/{firstId}/{secondId}/{thirdId}": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "ListWithFilterForm show filtered list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TestDomain"
+                ],
+                "summary": "ListWithFilterForm show filtered list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "first id",
+                        "name": "firstId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "second id",
+                        "name": "secondId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "third id",
+                        "name": "thirdId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "perPage",
+                        "in": "query"
+                    },
+                    {
+                        "description": "body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.FilterForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseApi-array_handlers_TestDomain"
+                        }
+                    }
+                }
+            }
+        },
         "/test_handler/strings": {
             "get": {
                 "security": [
@@ -961,6 +1028,47 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/responses.ResponseApi-array_string"
+                        }
+                    }
+                }
+            }
+        },
+        "/test_handler/{firstId}/{secondId}": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete test with multiple path args",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TestDomain"
+                ],
+                "summary": "Delete test with multiple path args",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "first id",
+                        "name": "firstId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "second id",
+                        "name": "secondId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ResponseApi-responses_ResponseStatus"
                         }
                     }
                 }
@@ -1275,6 +1383,17 @@
             "properties": {
                 "weight": {
                     "type": "integer"
+                }
+            }
+        },
+        "handlers.FilterForm": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },
